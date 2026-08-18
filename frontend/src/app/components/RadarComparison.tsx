@@ -11,7 +11,7 @@ import {
   Tooltip, 
   ResponsiveContainer 
 } from "recharts";
-import { Search } from "lucide-react";
+import SearchableCombobox, { ComboboxOption } from "./SearchableCombobox";
 
 interface University {
   country: string;
@@ -44,25 +44,26 @@ const INDICATOR_KEYS = [
 ];
 
 export default function RadarComparison({ data }: RadarComparisonProps) {
-  // Unique list of countries
-  const countries = useMemo(() => {
-    const set = new Set(data.map((d) => d.country).filter(Boolean));
-    return Array.from(set).sort();
+  // Convert unique country list into Combobox options
+  const countryOptions: ComboboxOption[] = useMemo(() => {
+    const map: Record<string, number> = {};
+    data.forEach((d) => {
+      if (d.country) map[d.country] = (map[d.country] || 0) + 1;
+    });
+
+    return Object.keys(map)
+      .sort()
+      .map((c) => ({
+        id: c,
+        label: c,
+        sublabel: `${map[c]} Ranked Universities`,
+      }));
   }, [data]);
 
   // Selected Country States
   const [countryA, setCountryA] = useState("United States of America");
   const [countryB, setCountryB] = useState("United Kingdom");
   const [countryC, setCountryC] = useState("Germany");
-
-  // Search Input States
-  const [searchA, setSearchA] = useState("");
-  const [searchB, setSearchB] = useState("");
-  const [searchC, setSearchC] = useState("");
-
-  const filteredA = useMemo(() => countries.filter((c) => c.toLowerCase().includes(searchA.toLowerCase())), [countries, searchA]);
-  const filteredB = useMemo(() => countries.filter((c) => c.toLowerCase().includes(searchB.toLowerCase())), [countries, searchB]);
-  const filteredC = useMemo(() => countries.filter((c) => c.toLowerCase().includes(searchC.toLowerCase())), [countries, searchC]);
 
   // Radar Data calculation
   const radarData = useMemo(() => {
@@ -96,85 +97,32 @@ export default function RadarComparison({ data }: RadarComparisonProps) {
           </p>
         </div>
 
-        {/* Searchable Country Selectors */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-          {/* Country A */}
-          <div className="space-y-1">
-            <label className="block text-[10px] font-bold text-indigo-600 dark:text-indigo-400">
-              Country A (Indigo): <span className="font-extrabold">{countryA}</span>
-            </label>
-            <div className="relative">
-              <Search className="w-3 h-3 text-sub absolute left-2.5 top-2.5" />
-              <input
-                type="text"
-                placeholder="Search country A..."
-                value={searchA}
-                onChange={(e) => setSearchA(e.target.value)}
-                className="w-full custom-input rounded-xl pl-8 pr-2 py-1.5 text-xs font-semibold focus:outline-none"
-              />
-            </div>
-            <select
-              value={countryA}
-              onChange={(e) => { setCountryA(e.target.value); setSearchA(""); }}
-              className="w-full custom-input rounded-xl px-2 py-1 font-bold text-xs focus:outline-none"
-            >
-              {filteredA.map((c) => (
-                <option key={c} value={c}>{c}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Country B */}
-          <div className="space-y-1">
-            <label className="block text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
-              Country B (Emerald): <span className="font-extrabold">{countryB}</span>
-            </label>
-            <div className="relative">
-              <Search className="w-3 h-3 text-sub absolute left-2.5 top-2.5" />
-              <input
-                type="text"
-                placeholder="Search country B..."
-                value={searchB}
-                onChange={(e) => setSearchB(e.target.value)}
-                className="w-full custom-input rounded-xl pl-8 pr-2 py-1.5 text-xs font-semibold focus:outline-none"
-              />
-            </div>
-            <select
-              value={countryB}
-              onChange={(e) => { setCountryB(e.target.value); setSearchB(""); }}
-              className="w-full custom-input rounded-xl px-2 py-1 font-bold text-xs focus:outline-none"
-            >
-              {filteredB.map((c) => (
-                <option key={c} value={c}>{c}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Country C */}
-          <div className="space-y-1">
-            <label className="block text-[10px] font-bold text-amber-600 dark:text-amber-400">
-              Country C (Amber): <span className="font-extrabold">{countryC}</span>
-            </label>
-            <div className="relative">
-              <Search className="w-3 h-3 text-sub absolute left-2.5 top-2.5" />
-              <input
-                type="text"
-                placeholder="Search country C..."
-                value={searchC}
-                onChange={(e) => setSearchC(e.target.value)}
-                className="w-full custom-input rounded-xl pl-8 pr-2 py-1.5 text-xs font-semibold focus:outline-none"
-              />
-            </div>
-            <select
-              value={countryC}
-              onChange={(e) => { setCountryC(e.target.value); setSearchC(""); }}
-              className="w-full custom-input rounded-xl px-2 py-1 font-bold text-xs focus:outline-none"
-            >
-              {filteredC.map((c) => (
-                <option key={c} value={c}>{c}</option>
-              ))}
-            </select>
-          </div>
+        {/* 3 High-Performance Searchable Comboboxes */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs w-full lg:w-auto">
+          <SearchableCombobox
+            label="Country A (Indigo)"
+            options={countryOptions}
+            value={countryA}
+            onChange={(opt) => setCountryA(opt.id)}
+            placeholder="Search Country A..."
+            accentColor="indigo"
+          />
+          <SearchableCombobox
+            label="Country B (Emerald)"
+            options={countryOptions}
+            value={countryB}
+            onChange={(opt) => setCountryB(opt.id)}
+            placeholder="Search Country B..."
+            accentColor="emerald"
+          />
+          <SearchableCombobox
+            label="Country C (Amber)"
+            options={countryOptions}
+            value={countryC}
+            onChange={(opt) => setCountryC(opt.id)}
+            placeholder="Search Country C..."
+            accentColor="amber"
+          />
         </div>
       </div>
 

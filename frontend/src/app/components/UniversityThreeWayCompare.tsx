@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Scale, Search, Trophy, Award } from "lucide-react";
+import { Scale } from "lucide-react";
+import SearchableCombobox, { ComboboxOption } from "./SearchableCombobox";
 
 interface University {
   name: string;
@@ -36,24 +37,21 @@ const INDICATORS = [
 ];
 
 export default function UniversityThreeWayCompare({ data }: UniversityThreeWayCompareProps) {
-  // Sort universities alphabetically for selectors
-  const uniList = useMemo(() => {
-    return [...data].sort((a, b) => a.name.localeCompare(b.name));
+  // Convert university list into Combobox options
+  const uniOptions: ComboboxOption[] = useMemo(() => {
+    return [...data]
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map((u) => ({
+        id: u.name,
+        label: u.name,
+        sublabel: `${u.country} • Rank #${u.overall_rank_new} • Score: ${u.overall_score_new}`,
+      }));
   }, [data]);
 
   // Selected University States
   const [uniA, setUniA] = useState("Massachusetts Institute of Technology (MIT)");
   const [uniB, setUniB] = useState("Imperial College London");
   const [uniC, setUniC] = useState("Stanford University");
-
-  // Search Input States
-  const [searchA, setSearchA] = useState("");
-  const [searchB, setSearchB] = useState("");
-  const [searchC, setSearchC] = useState("");
-
-  const filteredA = useMemo(() => uniList.filter((u) => u.name.toLowerCase().includes(searchA.toLowerCase())), [uniList, searchA]);
-  const filteredB = useMemo(() => uniList.filter((u) => u.name.toLowerCase().includes(searchB.toLowerCase())), [uniList, searchB]);
-  const filteredC = useMemo(() => uniList.filter((u) => u.name.toLowerCase().includes(searchC.toLowerCase())), [uniList, searchC]);
 
   const objA = useMemo(() => data.find((u) => u.name === uniA) || data[0], [data, uniA]);
   const objB = useMemo(() => data.find((u) => u.name === uniB) || data[1], [data, uniB]);
@@ -84,7 +82,7 @@ export default function UniversityThreeWayCompare({ data }: UniversityThreeWayCo
 
   return (
     <div className="space-y-6">
-      {/* Search & Selector Banner */}
+      {/* High-Performance Searchable Selectors Banner */}
       <div className="glass-card p-6 rounded-2xl space-y-4">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-gray-200 dark:border-gray-800">
           <div className="flex items-center space-x-3">
@@ -96,94 +94,41 @@ export default function UniversityThreeWayCompare({ data }: UniversityThreeWayCo
                 3-University Head-to-Head Comparison & Dumbbell Chart
               </h3>
               <p className="text-xs text-sub">
-                Type institution names to search, filter, and compare across all 9 QS dimensions.
+                Type any university name for debounced auto-complete and instant head-to-head analysis.
               </p>
             </div>
           </div>
 
-          {/* Searchable Selectors */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-            {/* Uni A */}
-            <div className="space-y-1">
-              <label className="block text-[10px] font-bold text-indigo-600 dark:text-indigo-400">
-                Uni A (Indigo): <span className="font-extrabold truncate">{objA?.name}</span>
-              </label>
-              <div className="relative">
-                <Search className="w-3 h-3 text-sub absolute left-2.5 top-2.5" />
-                <input
-                  type="text"
-                  placeholder="Search Uni A..."
-                  value={searchA}
-                  onChange={(e) => setSearchA(e.target.value)}
-                  className="w-full custom-input rounded-xl pl-8 pr-2 py-1.5 text-xs font-semibold focus:outline-none"
-                />
-              </div>
-              <select
-                value={uniA}
-                onChange={(e) => { setUniA(e.target.value); setSearchA(""); }}
-                className="w-full custom-input rounded-xl px-2 py-1 font-bold text-xs focus:outline-none"
-              >
-                {filteredA.map((u) => (
-                  <option key={u.name} value={u.name}>{u.name}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Uni B */}
-            <div className="space-y-1">
-              <label className="block text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
-                Uni B (Emerald): <span className="font-extrabold truncate">{objB?.name}</span>
-              </label>
-              <div className="relative">
-                <Search className="w-3 h-3 text-sub absolute left-2.5 top-2.5" />
-                <input
-                  type="text"
-                  placeholder="Search Uni B..."
-                  value={searchB}
-                  onChange={(e) => setSearchB(e.target.value)}
-                  className="w-full custom-input rounded-xl pl-8 pr-2 py-1.5 text-xs font-semibold focus:outline-none"
-                />
-              </div>
-              <select
-                value={uniB}
-                onChange={(e) => { setUniB(e.target.value); setSearchB(""); }}
-                className="w-full custom-input rounded-xl px-2 py-1 font-bold text-xs focus:outline-none"
-              >
-                {filteredB.map((u) => (
-                  <option key={u.name} value={u.name}>{u.name}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Uni C */}
-            <div className="space-y-1">
-              <label className="block text-[10px] font-bold text-amber-600 dark:text-amber-400">
-                Uni C (Amber): <span className="font-extrabold truncate">{objC?.name}</span>
-              </label>
-              <div className="relative">
-                <Search className="w-3 h-3 text-sub absolute left-2.5 top-2.5" />
-                <input
-                  type="text"
-                  placeholder="Search Uni C..."
-                  value={searchC}
-                  onChange={(e) => setSearchC(e.target.value)}
-                  className="w-full custom-input rounded-xl pl-8 pr-2 py-1.5 text-xs font-semibold focus:outline-none"
-                />
-              </div>
-              <select
-                value={uniC}
-                onChange={(e) => { setUniC(e.target.value); setSearchC(""); }}
-                className="w-full custom-input rounded-xl px-2 py-1 font-bold text-xs focus:outline-none"
-              >
-                {filteredC.map((u) => (
-                  <option key={u.name} value={u.name}>{u.name}</option>
-                ))}
-              </select>
-            </div>
+          {/* 3 High-Performance Searchable Comboboxes */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs w-full lg:w-auto">
+            <SearchableCombobox
+              label="University A (Indigo)"
+              options={uniOptions}
+              value={uniA}
+              onChange={(opt) => setUniA(opt.id)}
+              placeholder="Search Uni A..."
+              accentColor="indigo"
+            />
+            <SearchableCombobox
+              label="University B (Emerald)"
+              options={uniOptions}
+              value={uniB}
+              onChange={(opt) => setUniB(opt.id)}
+              placeholder="Search Uni B..."
+              accentColor="emerald"
+            />
+            <SearchableCombobox
+              label="University C (Amber)"
+              options={uniOptions}
+              value={uniC}
+              onChange={(opt) => setUniC(opt.id)}
+              placeholder="Search Uni C..."
+              accentColor="amber"
+            />
           </div>
         </div>
 
-        {/* Comparison Table */}
+        {/* 1. Comparison Table */}
         <div className="overflow-x-auto pt-2">
           <table className="w-full text-left text-xs">
             <thead className="custom-table-header uppercase tracking-wider font-extrabold">
