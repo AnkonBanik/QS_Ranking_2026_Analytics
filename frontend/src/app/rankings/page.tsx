@@ -12,6 +12,7 @@ import {
   AlertCircle
 } from "lucide-react";
 import ScoreCard from "../components/ScoreCard";
+import WorldChoroplethMap from "../components/WorldChoroplethMap";
 
 interface University {
   sl: number;
@@ -167,6 +168,9 @@ export default function RankingsPage() {
           Reset All Filters
         </button>
       </div>
+
+      {/* Interactive World Map */}
+      <WorldChoroplethMap />
 
       {/* Overview Score-Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

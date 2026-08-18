@@ -1,7 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ShieldCheck, Database, Layers, CheckCircle2, FileSpreadsheet, AlertCircle } from "lucide-react";
+import { 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  Cell
+} from "recharts";
+import { ShieldCheck, Database, Layers, CheckCircle2, FileSpreadsheet, AlertCircle, BarChart2 } from "lucide-react";
 import ScoreCard from "../components/ScoreCard";
 
 interface MissingReportItem {
@@ -47,7 +57,7 @@ export default function DataQualityPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
         <div className="w-12 h-12 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
-        <p className="text-sm font-medium text-gray-400">Loading Data Quality Audit...</p>
+        <p className="text-sm font-medium text-sub">Loading Data Quality Audit...</p>
       </div>
     );
   }
@@ -62,14 +72,14 @@ export default function DataQualityPage() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="pb-6 border-b border-gray-800">
-        <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-          Part 4 — Data Quality & Transparency Audit
+      <div className="pb-6 border-b border-gray-200 dark:border-gray-800">
+        <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30">
+          Data Quality & Transparency Audit
         </span>
-        <h1 className="text-3xl font-extrabold text-white tracking-tight mt-2">
+        <h1 className="text-3xl font-extrabold text-main tracking-tight mt-2">
           Data Quality & <span className="gradient-text">Imputation Audit</span>
         </h1>
-        <p className="text-sm text-gray-400 mt-1 max-w-2xl">
+        <p className="text-sm text-sub mt-1 max-w-2xl">
           Full per-cell audit of missing value taxonomy and 3-layer imputation cascade tracking.
         </p>
       </div>
@@ -106,21 +116,50 @@ export default function DataQualityPage() {
         />
       </div>
 
+      {/* Missingness Percentage Bar Chart */}
+      <div className="glass-card p-6 rounded-2xl">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h3 className="font-extrabold text-main text-lg">Raw Missingness Percentage Bar Chart</h3>
+            <p className="text-xs text-sub">Percentage of gaps per indicator prior to 3-layer cascade imputation</p>
+          </div>
+          <BarChart2 className="w-5 h-5 text-indigo-500" />
+        </div>
+
+        <div className="h-64 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={missingReport} margin={{ top: 10, right: 30, left: 0, bottom: 20 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#475569" opacity={0.3} />
+              <XAxis dataKey="column" stroke="#94a3b8" fontSize={11} angle={-15} textAnchor="end" />
+              <YAxis stroke="#94a3b8" fontSize={11} domain={[0, 10]} />
+              <Tooltip
+                contentStyle={{ backgroundColor: "#0F172A", borderColor: "#334155", borderRadius: "12px", color: "#FFF" }}
+              />
+              <Bar dataKey="pct_missing" fill="#6366F1" radius={[8, 8, 0, 0]}>
+                {missingReport.map((entry, idx) => (
+                  <Cell key={`cell-${idx}`} fill={entry.pct_missing > 3 ? "#EF4444" : "#6366F1"} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
       {/* Pre-Imputation Raw Missing Value Taxonomy Table */}
       <div className="glass-card p-6 rounded-2xl">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="font-bold text-white text-lg">Raw Source Missing Value Taxonomy</h3>
-            <p className="text-xs text-gray-400">Pre-cleaning breakdown of NaN, dashes (-), empty strings, and 701+/43= rank patterns</p>
+            <h3 className="font-extrabold text-main text-lg">Raw Source Missing Value Taxonomy</h3>
+            <p className="text-xs text-sub">Pre-cleaning breakdown of NaN, dashes (-), empty strings, and 701+/43= rank patterns</p>
           </div>
-          <span className="text-xs text-indigo-400 font-semibold bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">
+          <span className="text-xs text-indigo-600 dark:text-indigo-300 font-bold bg-indigo-500/15 px-3 py-1 rounded-full border border-indigo-500/30">
             9 Score Columns
           </span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-gray-300">
-            <thead className="bg-slate-900/90 text-gray-400 uppercase tracking-wider font-semibold">
+          <table className="w-full text-left text-xs">
+            <thead className="custom-table-header uppercase tracking-wider font-extrabold">
               <tr>
                 <th className="py-3 px-4">Column</th>
                 <th className="py-3 px-4 text-center">NaN Count</th>
@@ -131,16 +170,16 @@ export default function DataQualityPage() {
                 <th className="py-3 px-4 text-center">Missing %</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800/60">
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
               {missingReport.map((row) => (
-                <tr key={row.column} className="hover:bg-slate-800/50">
-                  <td className="py-3 px-4 font-bold text-white">{row.column}</td>
+                <tr key={row.column} className="custom-table-row transition-colors">
+                  <td className="py-3 px-4 font-bold text-main">{row.column}</td>
                   <td className="py-3 px-4 text-center font-mono">{row.nan_count}</td>
                   <td className="py-3 px-4 text-center font-mono">{row.dash_count}</td>
                   <td className="py-3 px-4 text-center font-mono">{row.empty_count}</td>
-                  <td className="py-3 px-4 text-center font-mono text-indigo-400">{row.pattern_count}</td>
-                  <td className="py-3 px-4 text-center font-bold text-amber-400">{row.total_missing}</td>
-                  <td className="py-3 px-4 text-center font-mono text-gray-400">{row.pct_missing}%</td>
+                  <td className="py-3 px-4 text-center font-mono text-indigo-600 dark:text-indigo-400 font-bold">{row.pattern_count}</td>
+                  <td className="py-3 px-4 text-center font-bold text-amber-600 dark:text-amber-400">{row.total_missing}</td>
+                  <td className="py-3 px-4 text-center font-mono text-sub">{row.pct_missing}%</td>
                 </tr>
               ))}
             </tbody>
@@ -152,17 +191,17 @@ export default function DataQualityPage() {
       <div className="glass-card p-6 rounded-2xl border border-emerald-500/20">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="font-bold text-white text-lg">Per-Cell Imputation Method Breakdown</h3>
-            <p className="text-xs text-gray-400">Recorded by the *_imputed_method tracking flag during pipeline execution</p>
+            <h3 className="font-extrabold text-main text-lg">Per-Cell Imputation Method Breakdown</h3>
+            <p className="text-xs text-sub">Recorded by the *_imputed_method tracking flag during pipeline execution</p>
           </div>
-          <span className="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+          <span className="text-xs text-emerald-600 dark:text-emerald-300 font-bold bg-emerald-500/15 px-3 py-1 rounded-full border border-emerald-500/30">
             0% Gaps Remaining
           </span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-gray-300">
-            <thead className="bg-slate-900/90 text-gray-400 uppercase tracking-wider font-semibold">
+          <table className="w-full text-left text-xs">
+            <thead className="custom-table-header uppercase tracking-wider font-extrabold">
               <tr>
                 <th className="py-3 px-4">Indicator</th>
                 <th className="py-3 px-4 text-center">Observed (Raw)</th>
@@ -172,15 +211,15 @@ export default function DataQualityPage() {
                 <th className="py-3 px-4 text-center">Total Imputed %</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800/60">
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
               {imputationLog.map((row) => (
-                <tr key={row.indicator} className="hover:bg-slate-800/50">
-                  <td className="py-3 px-4 font-bold text-white">{row.indicator}</td>
-                  <td className="py-3 px-4 text-center font-mono text-emerald-400">{row.observed}</td>
-                  <td className="py-3 px-4 text-center font-mono text-indigo-400">{row.group_median}</td>
-                  <td className="py-3 px-4 text-center font-mono text-indigo-400">{row.knn}</td>
-                  <td className="py-3 px-4 text-center font-mono text-gray-500">{row.global_median}</td>
-                  <td className="py-3 px-4 text-center font-bold text-amber-400">{row.pct_imputed}%</td>
+                <tr key={row.indicator} className="custom-table-row transition-colors">
+                  <td className="py-3 px-4 font-bold text-main">{row.indicator}</td>
+                  <td className="py-3 px-4 text-center font-mono font-bold text-emerald-600 dark:text-emerald-400">{row.observed}</td>
+                  <td className="py-3 px-4 text-center font-mono font-bold text-indigo-600 dark:text-indigo-400">{row.group_median}</td>
+                  <td className="py-3 px-4 text-center font-mono font-bold text-indigo-600 dark:text-indigo-400">{row.knn}</td>
+                  <td className="py-3 px-4 text-center font-mono text-muted-custom">{row.global_median}</td>
+                  <td className="py-3 px-4 text-center font-bold text-amber-600 dark:text-amber-400">{row.pct_imputed}%</td>
                 </tr>
               ))}
             </tbody>

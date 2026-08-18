@@ -1,5 +1,5 @@
 """
-Export module for writing JSON data contracts, CSVs, and Excel workbooks consumed by the Next.js frontend and users.
+Export module for writing JSON data contracts, CSVs, and Excel workbooks.
 """
 import json
 from pathlib import Path
@@ -64,7 +64,10 @@ def export_all_pipeline_outputs(
     missing_report_df: pd.DataFrame,
     imputation_log_df: pd.DataFrame,
     outlier_summary_df: pd.DataFrame,
-    stats_tests_dict: dict
+    stats_tests_dict: dict,
+    indicator_dist_dict: dict,
+    original_vs_new_dict: dict,
+    map_data_list: list
 ):
     """
     Orchestrate full JSON export contract for frontend dashboard + Excel workbook.
@@ -107,7 +110,16 @@ def export_all_pipeline_outputs(
     # 9. Statistical Tests
     export_json(stats_tests_dict, 'stats_tests.json')
 
-    # 10. Excel & CSV Exports
+    # 10. Indicator Distributions & Boxplot Stats
+    export_json(indicator_dist_dict, 'indicator_distributions.json')
+
+    # 11. Original vs New Scatter & Shift Data
+    export_json(original_vs_new_dict, 'original_vs_new.json')
+
+    # 12. World Map Data
+    export_json(map_data_list, 'map_data.json')
+
+    # 13. Excel & CSV Exports
     export_excel_and_csv(df_complete, country_df, imputation_log_df)
 
     print("✅ All JSON data contracts and Excel workbook exported successfully.")

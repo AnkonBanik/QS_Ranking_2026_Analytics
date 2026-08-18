@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { BrainCircuit, CheckCircle2, AlertTriangle, Scale, Activity } from "lucide-react";
 import ScoreCard from "../components/ScoreCard";
+import BoxPlotChart from "../components/BoxPlotChart";
 
 interface StatsTestPayload {
   t_test_public_vs_private: {
@@ -214,6 +215,9 @@ export default function InsightsPage() {
           </table>
         </div>
       </div>
+
+      {/* Box Plots for Indicator Dispersion */}
+      <BoxPlotChart />
 
       {/* Outliers Table */}
       <div className="glass-card p-6 rounded-2xl">

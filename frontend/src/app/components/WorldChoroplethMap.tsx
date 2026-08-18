@@ -1,0 +1,159 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { Globe2, Building2, Trophy, BarChart3 } from "lucide-react";
+
+interface MapCountry {
+  country: string;
+  iso3: string;
+  count: number;
+  avg_score: number;
+  median_score: number;
+  top_university: string;
+}
+
+export default function WorldChoroplethMap() {
+  const [mapData, setMapData] = useState<MapCountry[]>([]);
+  const [metric, setMetric] = useState<"count" | "avg_score">("count");
+  const [activeCountry, setActiveCountry] = useState<MapCountry | null>(null);
+
+  useEffect(() => {
+    fetch("/data/map_data.json")
+      .then((res) => res.json())
+      .then((json) => {
+        setMapData(json);
+        if (json.length > 0) setActiveCountry(json[0]);
+      })
+      .catch((err) => console.error("Failed to load map data:", err));
+  }, []);
+
+  const maxCount = Math.max(...mapData.map((d) => d.count), 1);
+  const maxScore = Math.max(...mapData.map((d) => d.avg_score), 1);
+
+  const getHeatColor = (country: MapCountry) => {
+    const val = metric === "count" ? country.count / maxCount : country.avg_score / maxScore;
+    if (val > 0.75) return "bg-indigo-600 dark:bg-indigo-500 text-white";
+    if (val > 0.4) return "bg-indigo-500/80 dark:bg-indigo-600/80 text-white";
+    if (val > 0.2) return "bg-indigo-400/60 dark:bg-indigo-700/60 text-slate-900 dark:text-white";
+    return "bg-indigo-100 dark:bg-slate-800 text-slate-800 dark:text-gray-300";
+  };
+
+  return (
+    <div className="glass-card p-6 rounded-2xl space-y-6">
+      {/* Header Controls */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-200 dark:border-gray-800">
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 rounded-xl bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-500/30">
+            <Globe2 className="w-5 h-5" />
+          </div>
+          <div>
+            <h3 className="font-extrabold text-main text-lg tracking-tight">
+              Global University Choropleth Map
+            </h3>
+            <p className="text-xs text-sub">
+              Geographical distribution across 106 countries and 5 regions.
+            </p>
+          </div>
+        </div>
+
+        {/* Metric Toggle Buttons */}
+        <div className="flex items-center space-x-2 text-xs font-bold">
+          <button
+            onClick={() => setMetric("count")}
+            className={`px-3 py-1.5 rounded-xl transition-all border ${
+              metric === "count"
+                ? "bg-indigo-600 text-white border-indigo-600 shadow-sm"
+                : "custom-pill border-gray-300 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-slate-800"
+            }`}
+          >
+            University Density
+          </button>
+          <button
+            onClick={() => setMetric("avg_score")}
+            className={`px-3 py-1.5 rounded-xl transition-all border ${
+              metric === "avg_score"
+                ? "bg-emerald-600 text-white border-emerald-600 shadow-sm"
+                : "custom-pill border-gray-300 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-slate-800"
+            }`}
+          >
+            Average Overall Score
+          </button>
+        </div>
+      </div>
+
+      {/* Main Grid View */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        {/* Country Heat Grid (106 Countries) */}
+        <div className="lg:col-span-2 space-y-3">
+          <div className="flex items-center justify-between text-xs font-bold text-sub px-1">
+            <span>Select Country ({mapData.length} Total)</span>
+            <span>Sorted by {metric === "count" ? "University Count" : "Average Score"}</span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-h-[360px] overflow-y-auto pr-2 custom-scrollbar">
+            {mapData.map((item) => (
+              <button
+                key={item.country}
+                onClick={() => setActiveCountry(item)}
+                className={`p-2.5 rounded-xl text-left transition-all border ${getHeatColor(item)} ${
+                  activeCountry?.country === item.country ? "ring-2 ring-indigo-400 font-extrabold scale-102" : "opacity-90 hover:opacity-100"
+                }`}
+              >
+                <div className="flex items-center justify-between text-xs font-bold">
+                  <span className="truncate pr-1">{item.country}</span>
+                  <span className="text-[10px] font-mono opacity-80">{item.iso3}</span>
+                </div>
+                <div className="text-[11px] mt-1 font-mono font-semibold opacity-90">
+                  {metric === "count" ? `${item.count} Unis` : `Score: ${item.avg_score}`}
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Selected Country Inspector Card */}
+        {activeCountry && (
+          <div className="glass-card p-5 rounded-xl border border-indigo-500/30 space-y-4 bg-indigo-500/5">
+            <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
+              <div>
+                <span className="text-[10px] font-bold text-sub uppercase tracking-wider">Country Insight</span>
+                <h4 className="font-extrabold text-main text-base">{activeCountry.country}</h4>
+              </div>
+              <span className="px-2.5 py-1 rounded-lg bg-indigo-600 text-white font-mono text-xs font-bold">
+                {activeCountry.iso3}
+              </span>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div className="flex items-center justify-between p-2 rounded-lg custom-pill">
+                <div className="flex items-center space-x-2">
+                  <Building2 className="w-4 h-4 text-indigo-500" />
+                  <span className="font-semibold text-sub">Total Universities</span>
+                </div>
+                <span className="font-extrabold text-main font-mono">{activeCountry.count}</span>
+              </div>
+
+              <div className="flex items-center justify-between p-2 rounded-lg custom-pill">
+                <div className="flex items-center space-x-2">
+                  <BarChart3 className="w-4 h-4 text-emerald-500" />
+                  <span className="font-semibold text-sub">Average Overall Score</span>
+                </div>
+                <span className="font-extrabold text-main font-mono">{activeCountry.avg_score}</span>
+              </div>
+
+              <div className="flex items-center justify-between p-2 rounded-lg custom-pill">
+                <div className="flex items-center space-x-2">
+                  <Trophy className="w-4 h-4 text-amber-500" />
+                  <span className="font-semibold text-sub">Top Ranked Institution</span>
+                </div>
+              </div>
+              <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-300 font-bold text-xs">
+                {activeCountry.top_university}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
