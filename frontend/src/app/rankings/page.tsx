@@ -215,10 +215,7 @@ export default function RankingsPage() {
       {/* 3. Overall Score & Rank Distribution Histograms */}
       <ScoreRankHistograms data={data} />
 
-      {/* 4. University Performance Heatmap (Top 20 x 9 Indicators) */}
-      <UniversityHeatmap data={data} />
-
-      {/* 5. Global University Distribution - World Map */}
+      {/* 4. Global University Distribution - World Map */}
       <WorldChoroplethMap />
 
       {/* 6. Control Bar: Search & Filters */}

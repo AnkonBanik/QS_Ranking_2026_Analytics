@@ -10,12 +10,13 @@ import {
   Tooltip, 
   ResponsiveContainer,
   Cell,
-  ScatterChart,
-  Scatter,
   LabelList
 } from "recharts";
-import { ArrowUpRight, ArrowDownRight, AlertCircle, RefreshCw, Filter } from "lucide-react";
+import { ArrowUpRight, ArrowDownRight, AlertCircle, Filter } from "lucide-react";
 import RadarComparison from "../components/RadarComparison";
+import UniversityHeatmap from "../components/UniversityHeatmap";
+import UniversityThreeWayCompare from "../components/UniversityThreeWayCompare";
+import AdvancedComparisonCharts from "../components/AdvancedComparisonCharts";
 
 interface University {
   name: string;
@@ -25,6 +26,7 @@ interface University {
   overall_rank_original: number;
   rank_change: number;
   overall_score_new: number;
+  score_difference: number;
   ar_score_imputed: number;
   er_score_imputed: number;
   fsr_score_imputed: number;
@@ -102,12 +104,10 @@ export default function ComparePage() {
   const regionalStats = useMemo(() => {
     if (rankings.length === 0) return [];
     
-    // Filter rankings by rank tier limit if active
     const filtered = activeRegionLimit > 0
       ? rankings.filter((u) => u.overall_rank_new <= activeRegionLimit)
       : rankings;
 
-    // Group by region
     const map: Record<string, number[]> = {};
     filtered.forEach((u) => {
       if (!u.region) return;
@@ -192,17 +192,17 @@ export default function ComparePage() {
           Comparative Analytics Suite
         </span>
         <h1 className="text-3xl font-extrabold text-main tracking-tight mt-2">
-          Country, Regional & <span className="gradient-text">3-Country Radar Analytics</span>
+          Country, Regional & <span className="gradient-text">Institutional Comparative Intelligence</span>
         </h1>
         <p className="text-sm text-sub mt-1 max-w-2xl">
-          Analyze institutional rank shifts, regional mean overall scores, and multi-country indicator profiles.
+          Analyze institutional rank shifts, regional mean overall scores, multi-country profiles, and 3-university head-to-head dumbbell charts.
         </p>
       </div>
 
-      {/* 1. Multi-Indicator Radar Component (3 Countries) */}
+      {/* 1. Multi-Indicator 3-Country Radar Comparison */}
       <RadarComparison data={rankings} />
 
-      {/* 2. Regional Mean Overall Score Chart with Filter & Score Labels */}
+      {/* 2. Regional Mean Overall Scores */}
       <div className="glass-card p-6 rounded-2xl space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-gray-200 dark:border-gray-800">
           <div>
@@ -273,7 +273,7 @@ export default function ComparePage() {
         </div>
       </div>
 
-      {/* 3. Top Countries by Ranked Institutions Chart with Filters & Score Labels */}
+      {/* 3. Top Countries by Ranked Institutions */}
       <div className="glass-card p-6 rounded-2xl space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-gray-200 dark:border-gray-800">
           <div>
@@ -352,67 +352,16 @@ export default function ComparePage() {
         </div>
       </div>
 
-      {/* 4. Original vs. New Re-Ranking Scatter Plot & Shift Histogram */}
-      {origVsNew && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Rank Shift Distribution Histogram */}
-          <div className="glass-card p-6 rounded-2xl">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h3 className="font-extrabold text-main text-base">Rank Shift Category Distribution</h3>
-                <p className="text-xs text-sub">Institutional shifts resulting from 10-level tie-breaker</p>
-              </div>
-              <RefreshCw className="w-4 h-4 text-indigo-500" />
-            </div>
+      {/* 4. University Performance Heatmap (Top 20 x 9 Indicators) — Moved to Compare page right after Top Countries */}
+      <UniversityHeatmap data={rankings} />
 
-            <div className="h-64 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={origVsNew.shift_binned} margin={{ top: 15, right: 20, left: 0, bottom: 25 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#475569" opacity={0.3} />
-                  <XAxis dataKey="category" stroke="#94a3b8" fontSize={10} angle={-15} textAnchor="end" />
-                  <YAxis stroke="#94a3b8" fontSize={11} />
-                  <Tooltip
-                    contentStyle={{ backgroundColor: "#0F172A", borderColor: "#334155", borderRadius: "12px", color: "#FFF" }}
-                  />
-                  <Bar dataKey="count" radius={[6, 6, 0, 0]}>
-                    <LabelList dataKey="count" position="top" fill="#94A3B8" fontSize={11} fontWeight={700} />
-                    {origVsNew.shift_binned.map((entry, idx) => (
-                      <Cell key={`cell-${idx}`} fill={entry.color} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
+      {/* 5. 3-University Head-to-Head Comparison & Dumbbell Chart */}
+      <UniversityThreeWayCompare data={rankings} />
 
-          {/* Original Rank vs New Tie-Breaker Rank Scatter */}
-          <div className="glass-card p-6 rounded-2xl">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h3 className="font-extrabold text-main text-base">Original vs. New Rank Scatter</h3>
-                <p className="text-xs text-sub">Linear correlation showing rank adjustment precision</p>
-              </div>
-            </div>
+      {/* 6. Advanced Comparison Charts Suite (Histograms, Scatters, Movement Quadrant) */}
+      <AdvancedComparisonCharts data={rankings} origVsNewData={origVsNew} />
 
-            <div className="h-64 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <ScatterChart margin={{ top: 10, right: 20, bottom: 20, left: 10 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#475569" opacity={0.3} />
-                  <XAxis type="number" dataKey="overall_rank_original" name="Original Rank" stroke="#94a3b8" fontSize={10} />
-                  <YAxis type="number" dataKey="overall_rank_new" name="New Dense Rank" stroke="#94a3b8" fontSize={10} />
-                  <Tooltip
-                    cursor={{ strokeDasharray: "3 3" }}
-                    contentStyle={{ backgroundColor: "#0F172A", borderColor: "#334155", borderRadius: "12px", color: "#FFF", fontSize: "11px" }}
-                  />
-                  <Scatter name="Universities" data={origVsNew.scatter_data} fill="#6366F1" opacity={0.7} />
-                </ScatterChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 5. Biggest Rank Gainers & Largest Re-Rank Adjustments Grid (POSITIONED AT BOTTOM) */}
+      {/* 7. Biggest Rank Gainers & Largest Re-Rank Adjustments (POSITIONED AT BOTTOM) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Biggest Rank Gainers */}
         <div className="glass-card p-6 rounded-2xl border border-emerald-500/20">

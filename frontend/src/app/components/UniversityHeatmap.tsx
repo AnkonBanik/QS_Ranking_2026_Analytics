@@ -41,21 +41,21 @@ export default function UniversityHeatmap({ data }: UniversityHeatmapProps) {
       .slice(0, 20);
   }, [data]);
 
-  // Color intensity calculation helper
+  // Vibrant Multi-Color Intensity Helper (No monochrome blue!)
   const getCellColorClass = (val: number) => {
-    if (val >= 98) return "bg-indigo-600 dark:bg-indigo-500 text-white font-extrabold";
-    if (val >= 90) return "bg-indigo-500/80 dark:bg-indigo-600/80 text-white font-bold";
-    if (val >= 80) return "bg-emerald-500/70 dark:bg-emerald-600/70 text-white font-bold";
-    if (val >= 70) return "bg-emerald-500/40 dark:bg-emerald-700/50 text-slate-900 dark:text-white font-semibold";
-    if (val >= 50) return "bg-amber-500/40 dark:bg-amber-700/50 text-slate-900 dark:text-white font-semibold";
-    return "bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-gray-300 font-medium";
+    if (val >= 98) return "bg-emerald-600 dark:bg-emerald-500 text-white font-extrabold shadow-sm";
+    if (val >= 90) return "bg-teal-600 dark:bg-teal-500 text-white font-bold";
+    if (val >= 80) return "bg-indigo-600 dark:bg-indigo-500 text-white font-bold";
+    if (val >= 70) return "bg-amber-500/90 dark:bg-amber-600/90 text-slate-900 dark:text-white font-semibold";
+    if (val >= 50) return "bg-rose-500/70 dark:bg-rose-600/70 text-white font-semibold";
+    return "bg-slate-300 dark:bg-slate-800 text-slate-900 dark:text-gray-300 font-medium";
   };
 
   return (
     <div className="glass-card p-6 rounded-2xl space-y-4">
       <div className="flex items-center justify-between pb-3 border-b border-gray-200 dark:border-gray-800">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-xl bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-500/30">
+          <div className="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center border border-emerald-500/30">
             <Grid className="w-5 h-5" />
           </div>
           <div>
@@ -63,14 +63,18 @@ export default function UniversityHeatmap({ data }: UniversityHeatmapProps) {
               University Performance Heatmap (Top 20 × 9 Indicators)
             </h3>
             <p className="text-xs text-sub">
-              Intensity matrix of standardized performance scores across all 9 QS dimensions.
+              Multi-colored intensity matrix across all 9 QS dimensions for top 20 global institutions.
             </p>
           </div>
         </div>
 
-        <span className="text-xs text-indigo-600 dark:text-indigo-300 font-bold bg-indigo-500/15 px-3 py-1 rounded-full border border-indigo-500/30">
-          20 Institutions × 9 Indicators
-        </span>
+        <div className="flex items-center space-x-2 text-[10px] font-bold">
+          <span className="px-2 py-0.5 rounded bg-emerald-600 text-white">98+</span>
+          <span className="px-2 py-0.5 rounded bg-teal-600 text-white">90-97</span>
+          <span className="px-2 py-0.5 rounded bg-indigo-600 text-white">80-89</span>
+          <span className="px-2 py-0.5 rounded bg-amber-500 text-slate-900">70-79</span>
+          <span className="px-2 py-0.5 rounded bg-rose-500 text-white">&lt;70</span>
+        </div>
       </div>
 
       {/* Heatmap Grid Table */}
