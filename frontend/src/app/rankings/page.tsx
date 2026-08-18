@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import ScoreCard from "../components/ScoreCard";
 import WorldChoroplethMap from "../components/WorldChoroplethMap";
+import TopUniversitiesBarChart from "../components/TopUniversitiesBarChart";
 
 interface University {
   sl: number;
@@ -208,6 +209,9 @@ export default function RankingsPage() {
 
       {/* Interactive World Map (Positioned below KPI score cards) */}
       <WorldChoroplethMap />
+
+      {/* Top Institutions Combination Bar Chart (Top 5, 10, 15, 20) */}
+      <TopUniversitiesBarChart data={data} />
 
       {/* Control Bar: Search & Filters */}
       <div className="glass-card p-5 rounded-2xl space-y-4">
