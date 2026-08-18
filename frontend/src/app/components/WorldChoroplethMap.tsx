@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Globe2, Building2, Trophy, BarChart3 } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
+import { Globe2, Building2, Trophy, BarChart3, Search } from "lucide-react";
 
 interface MapCountry {
   country: string;
@@ -16,6 +16,7 @@ export default function WorldChoroplethMap() {
   const [mapData, setMapData] = useState<MapCountry[]>([]);
   const [metric, setMetric] = useState<"count" | "avg_score">("count");
   const [activeCountry, setActiveCountry] = useState<MapCountry | null>(null);
+  const [countrySearch, setCountrySearch] = useState("");
 
   useEffect(() => {
     fetch("/data/map_data.json")
@@ -27,15 +28,24 @@ export default function WorldChoroplethMap() {
       .catch((err) => console.error("Failed to load map data:", err));
   }, []);
 
+  // Filter countries by search term
+  const filteredMapData = useMemo(() => {
+    if (!countrySearch.trim()) return mapData;
+    const term = countrySearch.toLowerCase().trim();
+    return mapData.filter(
+      (c) => c.country.toLowerCase().includes(term) || c.iso3.toLowerCase().includes(term)
+    );
+  }, [mapData, countrySearch]);
+
   const maxCount = Math.max(...mapData.map((d) => d.count), 1);
   const maxScore = Math.max(...mapData.map((d) => d.avg_score), 1);
 
   const getHeatColor = (country: MapCountry) => {
     const val = metric === "count" ? country.count / maxCount : country.avg_score / maxScore;
-    if (val > 0.75) return "bg-indigo-600 dark:bg-indigo-500 text-white";
-    if (val > 0.4) return "bg-indigo-500/80 dark:bg-indigo-600/80 text-white";
-    if (val > 0.2) return "bg-indigo-400/60 dark:bg-indigo-700/60 text-slate-900 dark:text-white";
-    return "bg-indigo-100 dark:bg-slate-800 text-slate-800 dark:text-gray-300";
+    if (val > 0.75) return "bg-indigo-600 dark:bg-indigo-500 text-white border-indigo-400";
+    if (val > 0.4) return "bg-indigo-500/80 dark:bg-indigo-600/80 text-white border-indigo-400/80";
+    if (val > 0.2) return "bg-indigo-400/60 dark:bg-indigo-700/60 text-slate-900 dark:text-white border-indigo-300/60";
+    return "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-gray-200 border-gray-200 dark:border-gray-700";
   };
 
   return (
@@ -81,22 +91,33 @@ export default function WorldChoroplethMap() {
         </div>
       </div>
 
-      {/* Main Grid View */}
+      {/* Main Grid View with Search */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-        {/* Country Heat Grid (106 Countries) */}
+        {/* Country Search & Grid (106 Countries) */}
         <div className="lg:col-span-2 space-y-3">
-          <div className="flex items-center justify-between text-xs font-bold text-sub px-1">
-            <span>Select Country ({mapData.length} Total)</span>
-            <span>Sorted by {metric === "count" ? "University Count" : "Average Score"}</span>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-bold text-sub px-1">
+            <span>Select Country ({filteredMapData.length} Shown / 106 Total)</span>
+
+            {/* Map Country Search Bar */}
+            <div className="relative w-full sm:w-64">
+              <Search className="w-3.5 h-3.5 text-sub absolute left-3 top-2.5" />
+              <input
+                type="text"
+                placeholder="Search map country..."
+                value={countrySearch}
+                onChange={(e) => setCountrySearch(e.target.value)}
+                className="w-full custom-input rounded-xl pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:border-indigo-500"
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-h-[360px] overflow-y-auto pr-2 custom-scrollbar">
-            {mapData.map((item) => (
+            {filteredMapData.map((item) => (
               <button
                 key={item.country}
                 onClick={() => setActiveCountry(item)}
                 className={`p-2.5 rounded-xl text-left transition-all border ${getHeatColor(item)} ${
-                  activeCountry?.country === item.country ? "ring-2 ring-indigo-400 font-extrabold scale-102" : "opacity-90 hover:opacity-100"
+                  activeCountry?.country === item.country ? "ring-2 ring-indigo-400 font-extrabold scale-102 shadow-md" : "opacity-90 hover:opacity-100"
                 }`}
               >
                 <div className="flex items-center justify-between text-xs font-bold">
@@ -108,6 +129,11 @@ export default function WorldChoroplethMap() {
                 </div>
               </button>
             ))}
+            {filteredMapData.length === 0 && (
+              <div className="col-span-full py-8 text-center text-xs text-sub">
+                No countries matched "{countrySearch}"
+              </div>
+            )}
           </div>
         </div>
 

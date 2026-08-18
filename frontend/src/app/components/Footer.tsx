@@ -12,7 +12,7 @@ export default function Footer() {
                 <Sparkles className="w-3.5 h-3.5 text-white" />
               </div>
               <span className="font-bold text-main tracking-tight text-sm">
-                QS Analytics 2025
+                QS Analytics 2026
               </span>
             </div>
             <p className="mt-1.5 text-xs text-sub leading-relaxed">

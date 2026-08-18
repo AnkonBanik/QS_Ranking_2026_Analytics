@@ -6,10 +6,11 @@ import {
   Search, 
   Building2, 
   Globe2, 
-  CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  AlertCircle
+  AlertCircle,
+  Landmark,
+  Building
 } from "lucide-react";
 import ScoreCard from "../components/ScoreCard";
 import WorldChoroplethMap from "../components/WorldChoroplethMap";
@@ -81,6 +82,10 @@ export default function RankingsPage() {
     return Array.from(set).sort();
   }, [data]);
 
+  // Public & Private counts
+  const publicCount = useMemo(() => data.filter((d) => d.status_group === "Public").length, [data]);
+  const privateCount = useMemo(() => data.filter((d) => d.status_group === "Private").length, [data]);
+
   // Filtered Dataset
   const filteredData = useMemo(() => {
     return data.filter((uni) => {
@@ -149,7 +154,7 @@ export default function RankingsPage() {
         <div>
           <div className="flex items-center space-x-2 mb-2">
             <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 border border-indigo-500/30">
-              QS 2025 Dataset
+              QS 2026 Dataset
             </span>
             <span className="text-xs text-sub">• Dense Tie-Breaker Re-Ranking</span>
           </div>
@@ -169,10 +174,7 @@ export default function RankingsPage() {
         </button>
       </div>
 
-      {/* Interactive World Map */}
-      <WorldChoroplethMap />
-
-      {/* Overview Score-Cards */}
+      {/* Overview Score-Cards (Total Unis, Total Countries, Public, Private) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <ScoreCard
           title="Total Universities"
@@ -182,27 +184,30 @@ export default function RankingsPage() {
           icon={Building2}
         />
         <ScoreCard
-          title="Rank #1 Institution"
-          value={data[0]?.name.split("(")[0].trim() || "MIT"}
-          subtitle={`Score: ${data[0]?.overall_score_new}`}
-          badge={{ text: "Dense Rank #1", type: "indigo" }}
-          icon={Trophy}
-        />
-        <ScoreCard
-          title="Public vs Private"
-          value="1,197 / 307"
-          subtitle="Welch's t-test p = 0.005"
-          badge={{ text: "Sig. Difference", type: "success" }}
+          title="Total Countries"
+          value={countries.length.toLocaleString()}
+          subtitle="Across 5 Regions"
+          badge={{ text: "Global Coverage", type: "indigo" }}
           icon={Globe2}
         />
         <ScoreCard
-          title="Imputation Rate"
-          value="1.22%"
-          subtitle="165 cells filled across 3 layers"
-          badge={{ text: "98.78% Observed", type: "indigo" }}
-          icon={CheckCircle2}
+          title="Public Universities"
+          value={publicCount.toLocaleString()}
+          subtitle={`${((publicCount / data.length) * 100).toFixed(1)}% of total`}
+          badge={{ text: "Public Sector", type: "success" }}
+          icon={Landmark}
+        />
+        <ScoreCard
+          title="Private Universities"
+          value={privateCount.toLocaleString()}
+          subtitle={`${((privateCount / data.length) * 100).toFixed(1)}% of total`}
+          badge={{ text: "Private Sector", type: "warning" }}
+          icon={Building}
         />
       </div>
+
+      {/* Interactive World Map (Positioned below KPI score cards) */}
+      <WorldChoroplethMap />
 
       {/* Control Bar: Search & Filters */}
       <div className="glass-card p-5 rounded-2xl space-y-4">
@@ -342,16 +347,16 @@ export default function RankingsPage() {
                       isTop10 ? "bg-indigo-500/10" : ""
                     }`}
                   >
-                    {/* Rank Badge */}
+                    {/* Rank Badge - High Contrast for 1, 2, 3 and all ranks */}
                     <td className="py-3.5 px-4 text-center">
                       <span
-                        className={`inline-flex items-center justify-center w-7 h-7 rounded-lg font-extrabold ${
+                        className={`inline-flex items-center justify-center w-7 h-7 rounded-lg font-extrabold text-xs ${
                           uni.overall_rank_new === 1
-                            ? "bg-amber-400/20 text-amber-600 dark:text-amber-300 border border-amber-400/40"
+                            ? "bg-amber-400 text-slate-900 shadow-md border border-amber-300"
                             : uni.overall_rank_new === 2
-                            ? "bg-slate-300/20 text-slate-700 dark:text-slate-200 border border-slate-300/40"
+                            ? "bg-slate-200 text-slate-900 shadow-md border border-slate-300 font-extrabold"
                             : uni.overall_rank_new === 3
-                            ? "bg-amber-700/20 text-amber-700 dark:text-amber-400 border border-amber-700/40"
+                            ? "bg-amber-600 text-white shadow-md border border-amber-500"
                             : "custom-pill font-bold"
                         }`}
                       >
