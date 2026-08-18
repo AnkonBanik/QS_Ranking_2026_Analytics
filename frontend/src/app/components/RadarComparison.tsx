@@ -43,7 +43,7 @@ const INDICATOR_KEYS = [
 ];
 
 export default function RadarComparison({ data }: RadarComparisonProps) {
-  // Available Countries & Regions
+  // Available Countries
   const countries = useMemo(() => {
     const set = new Set(data.map((d) => d.country).filter(Boolean));
     return Array.from(set).sort();
@@ -51,41 +51,42 @@ export default function RadarComparison({ data }: RadarComparisonProps) {
 
   const [countryA, setCountryA] = useState("United States of America");
   const [countryB, setCountryB] = useState("United Kingdom");
+  const [countryC, setCountryC] = useState("Germany");
 
-  // Compute Averages for Country A and Country B
+  // Compute Averages for Country A, Country B, and Country C
   const radarData = useMemo(() => {
     const listA = data.filter((d) => d.country === countryA);
     const listB = data.filter((d) => d.country === countryB);
+    const listC = data.filter((d) => d.country === countryC);
 
     const calcAvg = (list: University[], key: string) => {
       if (list.length === 0) return 0;
       const sum = list.reduce((acc, curr) => acc + (curr[key as keyof University] as number || 0), 0);
-      return roundTo(sum / list.length, 1);
+      return Number((sum / list.length).toFixed(1));
     };
-
-    const roundTo = (num: number, dec: number) => Number(num.toFixed(dec));
 
     return INDICATOR_KEYS.map((ind) => ({
       indicator: ind.name,
       [countryA]: calcAvg(listA, ind.key),
       [countryB]: calcAvg(listB, ind.key),
+      [countryC]: calcAvg(listC, ind.key),
     }));
-  }, [data, countryA, countryB]);
+  }, [data, countryA, countryB, countryC]);
 
   return (
     <div className="glass-card p-6 rounded-2xl space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-200 dark:border-gray-800">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-gray-200 dark:border-gray-800">
         <div>
           <h3 className="font-extrabold text-main text-lg tracking-tight">
-            Multi-Indicator Radar Comparison
+            Multi-Indicator 3-Country Radar Comparison
           </h3>
           <p className="text-xs text-sub mt-0.5">
-            Compare average indicator profiles between any two countries across all 9 QS dimensions.
+            Side-by-side performance profiling across all 9 QS dimensions for 3 selected nations.
           </p>
         </div>
 
-        {/* Selectors */}
-        <div className="flex items-center space-x-3 text-xs">
+        {/* 3 Country Selectors */}
+        <div className="flex flex-wrap items-center gap-3 text-xs">
           <div>
             <label className="block text-[10px] font-bold text-sub mb-1">Country A (Indigo)</label>
             <select
@@ -113,6 +114,21 @@ export default function RadarComparison({ data }: RadarComparisonProps) {
               ))}
             </select>
           </div>
+
+          <span className="font-extrabold text-sub pt-4">VS</span>
+
+          <div>
+            <label className="block text-[10px] font-bold text-sub mb-1">Country C (Amber)</label>
+            <select
+              value={countryC}
+              onChange={(e) => setCountryC(e.target.value)}
+              className="custom-input rounded-xl px-3 py-1.5 font-bold focus:outline-none"
+            >
+              {countries.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
 
@@ -121,21 +137,28 @@ export default function RadarComparison({ data }: RadarComparisonProps) {
         <ResponsiveContainer width="100%" height="100%">
           <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
             <PolarGrid stroke="#475569" strokeDasharray="3 3" opacity={0.4} />
-            <PolarAngleAxis dataKey="indicator" stroke="#94A3B8" tick={{ fontSize: 11, fontWeight: 600 }} />
+            <PolarAngleAxis dataKey="indicator" stroke="#94A3B8" tick={{ fontSize: 11, fontWeight: 700 }} />
             <PolarRadiusAxis angle={30} domain={[0, 100]} stroke="#64748B" tick={{ fontSize: 10 }} />
             <Radar
               name={countryA}
               dataKey={countryA}
               stroke="#6366F1"
               fill="#6366F1"
-              fillOpacity={0.35}
+              fillOpacity={0.3}
             />
             <Radar
               name={countryB}
               dataKey={countryB}
               stroke="#10B981"
               fill="#10B981"
-              fillOpacity={0.35}
+              fillOpacity={0.3}
+            />
+            <Radar
+              name={countryC}
+              dataKey={countryC}
+              stroke="#F59E0B"
+              fill="#F59E0B"
+              fillOpacity={0.3}
             />
             <Tooltip
               contentStyle={{
@@ -144,7 +167,7 @@ export default function RadarComparison({ data }: RadarComparisonProps) {
                 borderRadius: "12px",
                 fontSize: "12px",
                 color: "#FFFFFF",
-                fontWeight: 600
+                fontWeight: 700
               }}
             />
             <Legend wrapperStyle={{ paddingTop: "10px", fontSize: "12px", fontWeight: 700 }} />
