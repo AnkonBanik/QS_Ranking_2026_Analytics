@@ -1,0 +1,21 @@
+{
+  "t_test_public_vs_private": {
+    "n_public": 1197,
+    "mean_public": 31.84,
+    "n_private": 307,
+    "mean_private": 28.31,
+    "t_statistic": 2.8122,
+    "p_value": 0.005124027421468153,
+    "significant_p05": true
+  },
+  "anova_size": {
+    "f_statistic": 24.5757,
+    "p_value": 1.5947098387606035e-15,
+    "significant_p05": true
+  },
+  "kruskal_size": {
+    "h_statistic": 50.9714,
+    "p_value": 4.9611977098646795e-11,
+    "significant_p05": true
+  }
+}

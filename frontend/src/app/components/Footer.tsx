@@ -2,7 +2,7 @@ import { Sparkles, Mail, ExternalLink, Calendar } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="glass-card border-t border-gray-200 dark:border-gray-800/80 mt-16 transition-colors">
+    <footer className="glass-card border-t border-gray-200 dark:border-gray-800 mt-16 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
           {/* Brand & Project Info */}
@@ -15,37 +15,37 @@ export default function Footer() {
                 QS Analytics 2025
               </span>
             </div>
-            <p className="mt-1.5 text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+            <p className="mt-1.5 text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
               Independent data cleaning, 3-layer imputation, standardization, and deterministic re-ranking.
             </p>
           </div>
 
           {/* Data Source & Publication Metadata */}
-          <div className="flex flex-col items-center justify-center text-center space-y-1">
-            <div className="flex items-center space-x-1.5 text-xs text-gray-600 dark:text-gray-300">
-              <span className="font-semibold text-gray-500 dark:text-gray-400">Data Source:</span>
+          <div className="flex flex-col items-center justify-center text-center space-y-1.5">
+            <div className="flex items-center space-x-1.5 text-xs text-gray-700 dark:text-gray-200">
+              <span className="font-medium text-gray-600 dark:text-gray-300">Data Source:</span>
               <a
                 href="https://www.topuniversities.com/world-university-rankings"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center space-x-1 font-medium text-indigo-600 dark:text-indigo-400 hover:underline"
+                className="inline-flex items-center space-x-1 font-bold text-indigo-600 dark:text-indigo-300 hover:underline"
               >
                 <span>topuniversities.com</span>
-                <ExternalLink className="w-3 h-3 ml-0.5" />
+                <ExternalLink className="w-3 h-3 ml-0.5 text-indigo-500" />
               </a>
             </div>
-            <div className="flex items-center space-x-1.5 text-[11px] text-gray-500 dark:text-gray-400">
-              <Calendar className="w-3 h-3 text-indigo-500" />
-              <span>Published on: <strong className="font-semibold text-slate-700 dark:text-gray-200">18 June 2026</strong></span>
+            <div className="flex items-center space-x-1.5 text-xs text-gray-600 dark:text-gray-300">
+              <Calendar className="w-3.5 h-3.5 text-emerald-500" />
+              <span>Published on: <strong className="font-bold text-slate-900 dark:text-white">18 June 2026</strong></span>
             </div>
           </div>
 
-          {/* Social Icons & Author (Icon-only email link) */}
+          {/* Social Icons & Author */}
           <div className="flex items-center justify-end space-x-3">
             {/* Mail Icon Hyperlink */}
             <a
               href="mailto:ankonbnk@gmail.com"
-              className="p-2.5 rounded-xl bg-gray-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-gray-200 dark:border-gray-700 hover:bg-emerald-500/10 hover:border-emerald-500/40 transition-all hover:scale-110"
+              className="p-2.5 rounded-xl bg-gray-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-gray-300 dark:border-gray-700 hover:bg-emerald-500/10 hover:border-emerald-500/40 transition-all hover:scale-110"
               title="Contact via Email (ankonbnk@gmail.com)"
               aria-label="Send email to Ankon Banik"
             >
@@ -57,7 +57,7 @@ export default function Footer() {
               href="https://github.com/AnkonBanik"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2.5 rounded-xl bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-500/10 hover:border-indigo-500/40 transition-all hover:scale-110"
+              className="p-2.5 rounded-xl bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-700 hover:text-indigo-600 dark:hover:text-indigo-300 hover:bg-indigo-500/10 hover:border-indigo-500/40 transition-all hover:scale-110"
               title="GitHub Profile"
               aria-label="GitHub Profile"
             >
@@ -71,7 +71,7 @@ export default function Footer() {
               href="https://www.linkedin.com/in/ankonbanik"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2.5 rounded-xl bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-500/10 hover:border-indigo-500/40 transition-all hover:scale-110"
+              className="p-2.5 rounded-xl bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-700 hover:text-indigo-600 dark:hover:text-indigo-300 hover:bg-indigo-500/10 hover:border-indigo-500/40 transition-all hover:scale-110"
               title="LinkedIn Profile"
               aria-label="LinkedIn Profile"
             >
@@ -81,8 +81,8 @@ export default function Footer() {
             </a>
 
             {/* Author Attribution */}
-            <div className="pl-2 border-l border-gray-200 dark:border-gray-800 text-right text-[11px] text-gray-500 dark:text-gray-400">
-              <span>By <strong className="font-semibold text-slate-900 dark:text-white">Ankon Banik</strong></span>
+            <div className="pl-2 border-l border-gray-300 dark:border-gray-700 text-right text-xs text-gray-600 dark:text-gray-300">
+              <span>By <strong className="font-bold text-slate-900 dark:text-white">Ankon Banik</strong></span>
             </div>
           </div>
         </div>

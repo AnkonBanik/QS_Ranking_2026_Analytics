@@ -6,9 +6,8 @@ __pycache__/
 *.pyo
 *.pyd
 
-# Generated Pipeline Outputs (User specified NOT to push output directory)
+# Generated Pipeline Output directory (Raw output kept local)
 output/
-frontend/public/data/
 
 # Next.js & Frontend Build Outputs
 frontend/node_modules/

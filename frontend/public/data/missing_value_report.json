@@ -1,0 +1,83 @@
+[
+  {
+    "column":"AR SCORE",
+    "nan_count":0,
+    "dash_count":0,
+    "empty_count":0,
+    "pattern_count":0,
+    "total_missing":0,
+    "pct_missing":0.0
+  },
+  {
+    "column":"ER SCORE",
+    "nan_count":0,
+    "dash_count":0,
+    "empty_count":0,
+    "pattern_count":0,
+    "total_missing":0,
+    "pct_missing":0.0
+  },
+  {
+    "column":"FSR SCORE",
+    "nan_count":1,
+    "dash_count":0,
+    "empty_count":0,
+    "pattern_count":0,
+    "total_missing":1,
+    "pct_missing":0.07
+  },
+  {
+    "column":"CPF SCORE",
+    "nan_count":0,
+    "dash_count":0,
+    "empty_count":0,
+    "pattern_count":0,
+    "total_missing":0,
+    "pct_missing":0.0
+  },
+  {
+    "column":"IFR SCORE",
+    "nan_count":87,
+    "dash_count":0,
+    "empty_count":0,
+    "pattern_count":0,
+    "total_missing":87,
+    "pct_missing":5.78
+  },
+  {
+    "column":"ISR SCORE",
+    "nan_count":55,
+    "dash_count":0,
+    "empty_count":0,
+    "pattern_count":0,
+    "total_missing":55,
+    "pct_missing":3.66
+  },
+  {
+    "column":"IRN SCORE",
+    "nan_count":2,
+    "dash_count":0,
+    "empty_count":0,
+    "pattern_count":0,
+    "total_missing":2,
+    "pct_missing":0.13
+  },
+  {
+    "column":"EO SCORE",
+    "nan_count":0,
+    "dash_count":0,
+    "empty_count":0,
+    "pattern_count":0,
+    "total_missing":0,
+    "pct_missing":0.0
+  },
+  {
+    "column":"SUS SCORE",
+    "nan_count":20,
+    "dash_count":0,
+    "empty_count":0,
+    "pattern_count":0,
+    "total_missing":20,
+    "pct_missing":1.33
+  }
+]

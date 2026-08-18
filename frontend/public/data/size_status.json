@@ -1,0 +1,132 @@
+{
+  "by_size": [
+    {
+      "size": "L",
+      "university_count": 656,
+      "mean_overall_score": 31.58,
+      "median_overall_score": 24.66,
+      "best_rank": 2,
+      "mean_ar": 26.06,
+      "mean_er": 26.83,
+      "mean_fsr": 33.44,
+      "mean_cpf": 30.13,
+      "mean_ifr": 37.36,
+      "mean_isr": 35.32,
+      "mean_irn": 61.24,
+      "mean_eo": 29.98,
+      "mean_sus": 59.47
+    },
+    {
+      "size": "M",
+      "university_count": 378,
+      "mean_overall_score": 25.56,
+      "median_overall_score": 21.6,
+      "best_rank": 1,
+      "mean_ar": 15.87,
+      "mean_er": 20.66,
+      "mean_fsr": 39.25,
+      "mean_cpf": 27.41,
+      "mean_ifr": 34.6,
+      "mean_isr": 35.1,
+      "mean_irn": 39.89,
+      "mean_eo": 24.7,
+      "mean_sus": 49.06
+    },
+    {
+      "size": "S",
+      "university_count": 105,
+      "mean_overall_score": 27.0,
+      "median_overall_score": 23.58,
+      "best_rank": 7,
+      "mean_ar": 13.86,
+      "mean_er": 17.9,
+      "mean_fsr": 44.12,
+      "mean_cpf": 35.23,
+      "mean_ifr": 51.43,
+      "mean_isr": 43.45,
+      "mean_irn": 27.84,
+      "mean_eo": 29.29,
+      "mean_sus": 39.56
+    },
+    {
+      "size": "XL",
+      "university_count": 365,
+      "mean_overall_score": 37.23,
+      "median_overall_score": 30.17,
+      "best_rank": 8,
+      "mean_ar": 38.46,
+      "mean_er": 36.33,
+      "mean_fsr": 23.52,
+      "mean_cpf": 34.85,
+      "mean_ifr": 31.37,
+      "mean_isr": 26.16,
+      "mean_irn": 72.21,
+      "mean_eo": 40.64,
+      "mean_sus": 62.56
+    }
+  ],
+  "by_status": [
+    {
+      "status_group": "Private",
+      "university_count": 307,
+      "mean_overall_score": 28.31,
+      "median_overall_score": 21.49,
+      "best_rank": 1,
+      "mean_ar": 22.16,
+      "mean_er": 28.55,
+      "mean_fsr": 40.28,
+      "mean_cpf": 21.92,
+      "mean_ifr": 36.49,
+      "mean_isr": 37.21,
+      "mean_irn": 38.46,
+      "mean_eo": 33.59,
+      "mean_sus": 50.44
+    },
+    {
+      "status_group": "Public",
+      "university_count": 1197,
+      "mean_overall_score": 31.84,
+      "median_overall_score": 25.45,
+      "best_rank": 2,
+      "mean_ar": 26.55,
+      "mean_er": 26.56,
+      "mean_fsr": 31.43,
+      "mean_cpf": 33.26,
+      "mean_ifr": 36.12,
+      "mean_isr": 32.68,
+      "mean_irn": 60.76,
+      "mean_eo": 30.58,
+      "mean_sus": 57.69
+    }
+  ],
+  "cross_tabulation": {
+    "counts": {
+      "Private": {
+        "L": 122,
+        "M": 112,
+        "S": 54,
+        "XL": 19
+      },
+      "Public": {
+        "L": 534,
+        "M": 266,
+        "S": 51,
+        "XL": 346
+      }
+    },
+    "mean_scores": {
+      "Private": {
+        "L": 30.85,
+        "M": 24.74,
+        "S": 27.49,
+        "XL": 35.43
+      },
+      "Public": {
+        "L": 31.75,
+        "M": 25.9,
+        "S": 26.49,
+        "XL": 37.33
+      }
+    }
+  }
+}
