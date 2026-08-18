@@ -260,10 +260,13 @@ export default function RankingsPage() {
             <span className="text-sub font-semibold">Rank Tier:</span>
             {[
               { label: "All", value: 0 },
+              { label: "Top 10", value: 10 },
+              { label: "Top 20", value: 20 },
               { label: "Top 50", value: 50 },
               { label: "Top 100", value: 100 },
+              { label: "Top 200", value: 200 },
               { label: "Top 500", value: 500 },
-              { label: "Top 1000", value: 1000 },
+              { label: "Top 800", value: 800 },
             ].map((t) => (
               <button
                 key={t.value}
