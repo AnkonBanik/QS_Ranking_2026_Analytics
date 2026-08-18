@@ -11,19 +11,19 @@ export default function Footer() {
               <div className="w-7 h-7 rounded-lg gradient-bg flex items-center justify-center shadow-md">
                 <Sparkles className="w-3.5 h-3.5 text-white" />
               </div>
-              <span className="font-bold text-slate-900 dark:text-white tracking-tight text-sm">
+              <span className="font-bold text-main tracking-tight text-sm">
                 QS Analytics 2025
               </span>
             </div>
-            <p className="mt-1.5 text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+            <p className="mt-1.5 text-xs text-sub leading-relaxed">
               Independent data cleaning, 3-layer imputation, standardization, and deterministic re-ranking.
             </p>
           </div>
 
           {/* Data Source & Publication Metadata */}
           <div className="flex flex-col items-center justify-center text-center space-y-1.5">
-            <div className="flex items-center space-x-1.5 text-xs text-gray-700 dark:text-gray-200">
-              <span className="font-medium text-gray-600 dark:text-gray-300">Data Source:</span>
+            <div className="flex items-center space-x-1.5 text-xs text-sub">
+              <span className="font-medium">Data Source:</span>
               <a
                 href="https://www.topuniversities.com/world-university-rankings"
                 target="_blank"
@@ -34,9 +34,9 @@ export default function Footer() {
                 <ExternalLink className="w-3 h-3 ml-0.5 text-indigo-500" />
               </a>
             </div>
-            <div className="flex items-center space-x-1.5 text-xs text-gray-600 dark:text-gray-300">
+            <div className="flex items-center space-x-1.5 text-xs text-sub">
               <Calendar className="w-3.5 h-3.5 text-emerald-500" />
-              <span>Published on: <strong className="font-bold text-slate-900 dark:text-white">18 June 2026</strong></span>
+              <span>Published on: <strong className="font-extrabold text-main">18 June 2026</strong></span>
             </div>
           </div>
 
@@ -45,7 +45,7 @@ export default function Footer() {
             {/* Mail Icon Hyperlink */}
             <a
               href="mailto:ankonbnk@gmail.com"
-              className="p-2.5 rounded-xl bg-gray-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 border border-gray-300 dark:border-gray-700 hover:bg-emerald-500/10 hover:border-emerald-500/40 transition-all hover:scale-110"
+              className="p-2.5 rounded-xl custom-pill text-emerald-600 dark:text-emerald-400 border border-gray-300 dark:border-gray-700 hover:bg-emerald-500/10 hover:border-emerald-500/40 transition-all hover:scale-110"
               title="Contact via Email (ankonbnk@gmail.com)"
               aria-label="Send email to Ankon Banik"
             >
@@ -57,7 +57,7 @@ export default function Footer() {
               href="https://github.com/AnkonBanik"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2.5 rounded-xl bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-700 hover:text-indigo-600 dark:hover:text-indigo-300 hover:bg-indigo-500/10 hover:border-indigo-500/40 transition-all hover:scale-110"
+              className="p-2.5 rounded-xl custom-pill text-main border border-gray-300 dark:border-gray-700 hover:text-indigo-600 dark:hover:text-indigo-300 hover:bg-indigo-500/10 hover:border-indigo-500/40 transition-all hover:scale-110"
               title="GitHub Profile"
               aria-label="GitHub Profile"
             >
@@ -71,7 +71,7 @@ export default function Footer() {
               href="https://www.linkedin.com/in/ankonbanik"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2.5 rounded-xl bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-700 hover:text-indigo-600 dark:hover:text-indigo-300 hover:bg-indigo-500/10 hover:border-indigo-500/40 transition-all hover:scale-110"
+              className="p-2.5 rounded-xl custom-pill text-main border border-gray-300 dark:border-gray-700 hover:text-indigo-600 dark:hover:text-indigo-300 hover:bg-indigo-500/10 hover:border-indigo-500/40 transition-all hover:scale-110"
               title="LinkedIn Profile"
               aria-label="LinkedIn Profile"
             >
@@ -81,8 +81,8 @@ export default function Footer() {
             </a>
 
             {/* Author Attribution */}
-            <div className="pl-2 border-l border-gray-300 dark:border-gray-700 text-right text-xs text-gray-600 dark:text-gray-300">
-              <span>By <strong className="font-bold text-slate-900 dark:text-white">Ankon Banik</strong></span>
+            <div className="pl-2 border-l border-gray-300 dark:border-gray-700 text-right text-xs text-sub">
+              <span>By <strong className="font-extrabold text-main">Ankon Banik</strong></span>
             </div>
           </div>
         </div>

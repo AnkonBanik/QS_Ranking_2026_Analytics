@@ -126,7 +126,7 @@ export default function RankingsPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
         <div className="w-12 h-12 rounded-full border-4 border-indigo-500/30 border-t-indigo-500 animate-spin" />
-        <p className="text-xs text-gray-400 font-medium">Loading rankings dataset...</p>
+        <p className="text-xs text-sub font-medium">Loading rankings dataset...</p>
       </div>
     );
   }
@@ -135,8 +135,8 @@ export default function RankingsPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] p-6 glass-card rounded-2xl border border-rose-500/30 text-center space-y-4">
         <AlertCircle className="w-12 h-12 text-rose-400" />
-        <h2 className="text-xl font-bold text-slate-900 dark:text-white">Data Contract Missing</h2>
-        <p className="text-xs text-gray-400 max-w-md">{error}</p>
+        <h2 className="text-xl font-bold text-main">Data Contract Missing</h2>
+        <p className="text-xs text-sub max-w-md">{error}</p>
       </div>
     );
   }
@@ -147,22 +147,22 @@ export default function RankingsPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-gray-200 dark:border-gray-800">
         <div>
           <div className="flex items-center space-x-2 mb-2">
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 border border-indigo-500/30">
               QS 2025 Dataset
             </span>
-            <span className="text-xs text-gray-500 dark:text-gray-400">• Dense Tie-Breaker Re-Ranking</span>
+            <span className="text-xs text-sub">• Dense Tie-Breaker Re-Ranking</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-3xl font-extrabold text-main tracking-tight">
             Global University <span className="gradient-text">Rankings Dashboard</span>
           </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 max-w-2xl">
+          <p className="text-sm text-sub mt-1 max-w-2xl">
             Cleaned and re-scored across 9 indicators using 3-layer imputation (Group Median → KNN → Global Median) and Z-score standardization.
           </p>
         </div>
 
         <button
           onClick={resetFilters}
-          className="self-start md:self-auto px-4 py-2 rounded-xl text-xs font-semibold bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 transition-colors"
+          className="self-start md:self-auto px-4 py-2 rounded-xl text-xs font-semibold custom-pill border border-gray-300 dark:border-gray-700 transition-colors hover:scale-105"
         >
           Reset All Filters
         </button>
@@ -205,13 +205,13 @@ export default function RankingsPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
           {/* Search Box */}
           <div className="md:col-span-2 relative">
-            <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-3" />
+            <Search className="w-4 h-4 text-sub absolute left-3.5 top-3.5" />
             <input
               type="text"
               placeholder="Search by university name or country..."
               value={searchTerm}
               onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-              className="w-full bg-slate-50 dark:bg-slate-900/90 border border-gray-300 dark:border-gray-700/80 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition-colors"
+              className="w-full custom-input rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
             />
           </div>
 
@@ -220,7 +220,7 @@ export default function RankingsPage() {
             <select
               value={selectedCountry}
               onChange={(e) => { setSelectedCountry(e.target.value); setCurrentPage(1); }}
-              className="w-full bg-slate-50 dark:bg-slate-900/90 border border-gray-300 dark:border-gray-700/80 rounded-xl px-3 py-2.5 text-sm text-slate-900 dark:text-gray-200 focus:outline-none focus:border-indigo-500 transition-colors"
+              className="w-full custom-input rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
             >
               <option value="ALL">All Countries ({countries.length})</option>
               {countries.map((c) => (
@@ -234,7 +234,7 @@ export default function RankingsPage() {
             <select
               value={selectedRegion}
               onChange={(e) => { setSelectedRegion(e.target.value); setCurrentPage(1); }}
-              className="w-full bg-slate-50 dark:bg-slate-900/90 border border-gray-300 dark:border-gray-700/80 rounded-xl px-3 py-2.5 text-sm text-slate-900 dark:text-gray-200 focus:outline-none focus:border-indigo-500 transition-colors"
+              className="w-full custom-input rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
             >
               <option value="ALL">All Regions ({regions.length})</option>
               {regions.map((r) => (
@@ -245,10 +245,10 @@ export default function RankingsPage() {
         </div>
 
         {/* Filter Pills Row */}
-        <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-gray-200 dark:border-gray-800/80 text-xs">
+        <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-gray-200 dark:border-gray-800 text-xs">
           {/* Rank Tier Filter */}
           <div className="flex items-center space-x-2">
-            <span className="text-gray-500 dark:text-gray-400 font-medium">Rank Tier:</span>
+            <span className="text-sub font-semibold">Rank Tier:</span>
             {[
               { label: "All", value: 0 },
               { label: "Top 50", value: 50 },
@@ -259,10 +259,10 @@ export default function RankingsPage() {
               <button
                 key={t.value}
                 onClick={() => { setTierLimit(t.value); setCurrentPage(1); }}
-                className={`px-3 py-1 rounded-lg font-medium transition-all ${
+                className={`px-3 py-1 rounded-lg font-bold transition-all ${
                   tierLimit === t.value
                     ? "bg-indigo-600 text-white shadow-sm"
-                    : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
+                    : "custom-pill hover:bg-indigo-600/20"
                 }`}
               >
                 {t.label}
@@ -272,15 +272,15 @@ export default function RankingsPage() {
 
           {/* Size Filter */}
           <div className="flex items-center space-x-2">
-            <span className="text-gray-500 dark:text-gray-400 font-medium">Size:</span>
+            <span className="text-sub font-semibold">Size:</span>
             {["ALL", "S", "M", "L", "XL"].map((sz) => (
               <button
                 key={sz}
                 onClick={() => { setSelectedSize(sz); setCurrentPage(1); }}
-                className={`px-2.5 py-1 rounded-lg font-medium transition-all ${
+                className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
                   selectedSize === sz
                     ? "bg-emerald-600 text-white shadow-sm"
-                    : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
+                    : "custom-pill hover:bg-emerald-600/20"
                 }`}
               >
                 {sz}
@@ -290,15 +290,15 @@ export default function RankingsPage() {
 
           {/* Status Filter */}
           <div className="flex items-center space-x-2">
-            <span className="text-gray-500 dark:text-gray-400 font-medium">Status:</span>
+            <span className="text-sub font-semibold">Status:</span>
             {["ALL", "Public", "Private"].map((st) => (
               <button
                 key={st}
                 onClick={() => { setSelectedStatus(st); setCurrentPage(1); }}
-                className={`px-2.5 py-1 rounded-lg font-medium transition-all ${
+                className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
                   selectedStatus === st
                     ? "bg-indigo-600 text-white shadow-sm"
-                    : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
+                    : "custom-pill hover:bg-indigo-600/20"
                 }`}
               >
                 {st}
@@ -309,10 +309,10 @@ export default function RankingsPage() {
       </div>
 
       {/* Main Rankings Data Table */}
-      <div className="glass-card rounded-2xl overflow-hidden shadow-2xl border border-gray-200 dark:border-gray-800/80">
+      <div className="glass-card rounded-2xl overflow-hidden shadow-2xl">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-slate-700 dark:text-gray-300">
-            <thead className="bg-gray-100 dark:bg-slate-900/90 text-gray-600 dark:text-gray-400 uppercase tracking-wider font-semibold border-b border-gray-200 dark:border-gray-800">
+          <table className="w-full text-left text-xs">
+            <thead className="custom-table-header uppercase tracking-wider font-extrabold">
               <tr>
                 <th className="py-3.5 px-4 text-center">Rank</th>
                 <th className="py-3.5 px-4">University</th>
@@ -328,27 +328,27 @@ export default function RankingsPage() {
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-800/60">
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
               {paginatedData.map((uni) => {
                 const isTop10 = uni.overall_rank_new <= 10;
                 return (
                   <tr
                     key={uni.sl}
-                    className={`hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors ${
-                      isTop10 ? "bg-indigo-50/50 dark:bg-indigo-950/20" : ""
+                    className={`custom-table-row transition-colors ${
+                      isTop10 ? "bg-indigo-500/10" : ""
                     }`}
                   >
                     {/* Rank Badge */}
                     <td className="py-3.5 px-4 text-center">
                       <span
-                        className={`inline-flex items-center justify-center w-7 h-7 rounded-lg font-bold ${
+                        className={`inline-flex items-center justify-center w-7 h-7 rounded-lg font-extrabold ${
                           uni.overall_rank_new === 1
-                            ? "bg-amber-400/20 text-amber-600 dark:text-amber-300 border border-amber-400/30"
+                            ? "bg-amber-400/20 text-amber-600 dark:text-amber-300 border border-amber-400/40"
                             : uni.overall_rank_new === 2
-                            ? "bg-slate-200 dark:bg-slate-300/20 text-slate-700 dark:text-slate-200 border border-slate-300/30"
+                            ? "bg-slate-300/20 text-slate-700 dark:text-slate-200 border border-slate-300/40"
                             : uni.overall_rank_new === 3
-                            ? "bg-amber-700/20 text-amber-700 dark:text-amber-500 border border-amber-700/30"
-                            : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+                            ? "bg-amber-700/20 text-amber-700 dark:text-amber-400 border border-amber-700/40"
+                            : "custom-pill font-bold"
                         }`}
                       >
                         {uni.overall_rank_new}
@@ -357,28 +357,28 @@ export default function RankingsPage() {
 
                     {/* University Name */}
                     <td className="py-3.5 px-4">
-                      <div className="font-semibold text-slate-900 dark:text-white text-sm">
+                      <div className="font-bold text-main text-sm">
                         {uni.name}
                       </div>
                     </td>
 
                     {/* Location */}
                     <td className="py-3.5 px-4">
-                      <div className="font-medium text-slate-800 dark:text-gray-200">{uni.country}</div>
-                      <div className="text-[10px] text-gray-500 dark:text-gray-400">{uni.region}</div>
+                      <div className="font-semibold text-main">{uni.country}</div>
+                      <div className="text-[10px] text-sub">{uni.region}</div>
                     </td>
 
                     {/* Size / Status */}
                     <td className="py-3.5 px-4 text-center">
                       <div className="flex items-center justify-center space-x-1.5">
-                        <span className="px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-mono text-[10px]">
+                        <span className="px-2 py-0.5 rounded custom-pill font-mono text-[10px] font-bold">
                           {uni.size}
                         </span>
                         <span
-                          className={`px-2 py-0.5 rounded text-[10px] font-medium ${
+                          className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                             uni.status_group === "Public"
-                              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                              : "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400"
+                              ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300"
+                              : "bg-indigo-500/15 text-indigo-600 dark:text-indigo-300"
                           }`}
                         >
                           {uni.status_group}
@@ -388,7 +388,7 @@ export default function RankingsPage() {
 
                     {/* Score */}
                     <td className="py-3.5 px-4 text-right">
-                      <div className="font-extrabold text-slate-900 dark:text-white text-sm">
+                      <div className="font-extrabold text-main text-sm">
                         {uni.overall_score_new.toFixed(2)}
                       </div>
                     </td>
@@ -396,24 +396,24 @@ export default function RankingsPage() {
                     {/* Rank Shift */}
                     <td className="py-3.5 px-4 text-center">
                       {uni.rank_change > 0 ? (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
                           +{uni.rank_change}
                         </span>
                       ) : uni.rank_change < 0 ? (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30">
                           {uni.rank_change}
                         </span>
                       ) : (
-                        <span className="text-gray-400 font-mono text-[10px]">=</span>
+                        <span className="text-sub font-mono text-[10px] font-bold">=</span>
                       )}
                     </td>
 
                     {/* Scores excerpt */}
-                    <td className="py-3.5 px-4 text-center font-mono text-gray-600 dark:text-gray-400">{uni.ar_score_imputed.toFixed(1)}</td>
-                    <td className="py-3.5 px-4 text-center font-mono text-gray-600 dark:text-gray-400">{uni.er_score_imputed.toFixed(1)}</td>
-                    <td className="py-3.5 px-4 text-center font-mono text-gray-600 dark:text-gray-400">{uni.fsr_score_imputed.toFixed(1)}</td>
-                    <td className="py-3.5 px-4 text-center font-mono text-gray-600 dark:text-gray-400">{uni.cpf_score_imputed.toFixed(1)}</td>
-                    <td className="py-3.5 px-4 text-center font-mono text-gray-600 dark:text-gray-400">{uni.sus_score_imputed.toFixed(1)}</td>
+                    <td className="py-3.5 px-4 text-center font-mono text-sub">{uni.ar_score_imputed.toFixed(1)}</td>
+                    <td className="py-3.5 px-4 text-center font-mono text-sub">{uni.er_score_imputed.toFixed(1)}</td>
+                    <td className="py-3.5 px-4 text-center font-mono text-sub">{uni.fsr_score_imputed.toFixed(1)}</td>
+                    <td className="py-3.5 px-4 text-center font-mono text-sub">{uni.cpf_score_imputed.toFixed(1)}</td>
+                    <td className="py-3.5 px-4 text-center font-mono text-sub">{uni.sus_score_imputed.toFixed(1)}</td>
                   </tr>
                 );
               })}
@@ -422,28 +422,28 @@ export default function RankingsPage() {
         </div>
 
         {/* Pagination Bar */}
-        <div className="bg-gray-50 dark:bg-slate-900/90 px-6 py-4 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+        <div className="custom-table-header px-6 py-4 flex items-center justify-between text-xs text-sub">
           <div>
-            Showing <span className="font-semibold text-slate-900 dark:text-white">{filteredData.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1}</span> to{" "}
-            <span className="font-semibold text-slate-900 dark:text-white">{Math.min(currentPage * itemsPerPage, filteredData.length)}</span> of{" "}
-            <span className="font-semibold text-slate-900 dark:text-white">{filteredData.length}</span> universities
+            Showing <span className="font-bold text-main">{filteredData.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1}</span> to{" "}
+            <span className="font-bold text-main">{Math.min(currentPage * itemsPerPage, filteredData.length)}</span> of{" "}
+            <span className="font-bold text-main">{filteredData.length}</span> universities
           </div>
 
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
               disabled={currentPage === 1}
-              className="p-2 rounded-lg bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="p-2 rounded-lg custom-pill text-main disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="font-semibold text-slate-800 dark:text-gray-200">
+            <span className="font-bold text-main">
               Page {currentPage} of {totalPages || 1}
             </span>
             <button
               onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
               disabled={currentPage >= totalPages}
-              className="p-2 rounded-lg bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="p-2 rounded-lg custom-pill text-main disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronRight className="w-4 h-4" />
             </button>

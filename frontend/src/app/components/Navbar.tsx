@@ -34,10 +34,10 @@ export default function Navbar() {
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <div>
-              <span className="font-bold text-lg text-slate-900 dark:text-white tracking-tight">
+              <span className="font-bold text-lg text-main tracking-tight">
                 QS <span className="gradient-text">Analytics</span>
               </span>
-              <span className="block text-[10px] text-gray-500 dark:text-gray-400 font-medium tracking-wider uppercase">
+              <span className="block text-[10px] text-sub font-bold tracking-wider uppercase">
                 Independent Re-Ranking
               </span>
             </div>
@@ -54,11 +54,11 @@ export default function Navbar() {
                   href={item.href}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     isActive
-                      ? "bg-indigo-600/10 dark:bg-indigo-600/30 text-indigo-600 dark:text-indigo-300 border border-indigo-500/30 shadow-sm"
-                      : "text-gray-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/60"
+                      ? "bg-indigo-600/15 text-indigo-600 dark:text-indigo-300 border border-indigo-500/30 shadow-sm"
+                      : "text-sub hover:text-main hover:bg-gray-100 dark:hover:bg-slate-800/60"
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${isActive ? "text-indigo-600 dark:text-indigo-400" : "text-gray-400"}`} />
+                  <Icon className={`w-4 h-4 ${isActive ? "text-indigo-600 dark:text-indigo-400" : "text-sub"}`} />
                   <span>{item.name}</span>
                 </Link>
               );
@@ -70,7 +70,7 @@ export default function Navbar() {
             {/* Direct Mail Contact Button */}
             <a
               href="mailto:ankonbnk@gmail.com"
-              className="p-2.5 rounded-xl border transition-all flex items-center justify-center bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700 hover:text-indigo-600 dark:hover:text-indigo-400 hover:scale-105"
+              className="p-2.5 rounded-xl border transition-all flex items-center justify-center custom-pill border-gray-300 dark:border-gray-700 text-main hover:text-indigo-600 dark:hover:text-indigo-400 hover:scale-105"
               title="Contact Ankon Banik (ankonbnk@gmail.com)"
             >
               <Mail className="w-4 h-4" />
@@ -80,9 +80,9 @@ export default function Navbar() {
             <ThemeToggle />
 
             {/* Total Universities Badge */}
-            <div className="hidden sm:flex items-center space-x-2 bg-emerald-500/10 dark:bg-emerald-500/20 border border-emerald-500/30 px-3 py-1.5 rounded-full">
+            <div className="hidden sm:flex items-center space-x-2 bg-emerald-500/15 border border-emerald-500/30 px-3 py-1.5 rounded-full">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-300">1,504 Universities</span>
+              <span className="text-xs font-bold text-emerald-600 dark:text-emerald-300">1,504 Universities</span>
             </div>
           </div>
         </div>

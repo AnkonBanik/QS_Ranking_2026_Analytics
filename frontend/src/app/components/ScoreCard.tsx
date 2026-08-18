@@ -26,13 +26,13 @@ export default function ScoreCard({
   const getBadgeStyle = () => {
     switch (badge?.type) {
       case "success":
-        return "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30";
+        return "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border-emerald-500/30";
       case "warning":
-        return "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30";
+        return "bg-amber-500/15 text-amber-600 dark:text-amber-300 border-amber-500/30";
       case "indigo":
-        return "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/30";
+        return "bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 border-indigo-500/30";
       default:
-        return "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700";
+        return "custom-pill border border-gray-300 dark:border-gray-700";
     }
   };
 
@@ -43,18 +43,18 @@ export default function ScoreCard({
 
       <div>
         <div className="flex items-center justify-between mb-3">
-          <span className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+          <span className="text-xs font-bold uppercase tracking-wider text-sub">
             {title}
           </span>
           {Icon && (
-            <div className="p-2 rounded-xl bg-gray-100 dark:bg-gray-800/80 text-indigo-600 dark:text-indigo-400 border border-gray-200 dark:border-gray-700/50">
+            <div className="p-2 rounded-xl custom-pill border border-gray-200 dark:border-gray-700/60 text-indigo-600 dark:text-indigo-300">
               <Icon className="w-4 h-4" />
             </div>
           )}
         </div>
 
         <div className="flex items-baseline space-x-2">
-          <span className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <span className="text-3xl font-extrabold text-main tracking-tight leading-tight">
             {value}
           </span>
           {trend && (
@@ -69,10 +69,10 @@ export default function ScoreCard({
         </div>
       </div>
 
-      <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-800/60 flex items-center justify-between">
-        {subtitle && <span className="text-xs text-gray-500 dark:text-gray-400">{subtitle}</span>}
+      <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-800/80 flex items-center justify-between">
+        {subtitle && <span className="text-xs text-sub">{subtitle}</span>}
         {badge && (
-          <span className={`text-[10px] font-semibold px-2.5 py-1 rounded-full border ${getBadgeStyle()}`}>
+          <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${getBadgeStyle()}`}>
             {badge.text}
           </span>
         )}
