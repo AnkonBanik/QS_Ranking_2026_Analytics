@@ -1,18 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { 
-  ScatterChart, 
-  Scatter, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer, 
-  Legend,
-  Cell
-} from "recharts";
-import { Scale, Trophy, Award } from "lucide-react";
+import { Scale, Search, Trophy, Award } from "lucide-react";
 
 interface University {
   name: string;
@@ -52,30 +41,50 @@ export default function UniversityThreeWayCompare({ data }: UniversityThreeWayCo
     return [...data].sort((a, b) => a.name.localeCompare(b.name));
   }, [data]);
 
+  // Selected University States
   const [uniA, setUniA] = useState("Massachusetts Institute of Technology (MIT)");
   const [uniB, setUniB] = useState("Imperial College London");
   const [uniC, setUniC] = useState("Stanford University");
+
+  // Search Input States
+  const [searchA, setSearchA] = useState("");
+  const [searchB, setSearchB] = useState("");
+  const [searchC, setSearchC] = useState("");
+
+  const filteredA = useMemo(() => uniList.filter((u) => u.name.toLowerCase().includes(searchA.toLowerCase())), [uniList, searchA]);
+  const filteredB = useMemo(() => uniList.filter((u) => u.name.toLowerCase().includes(searchB.toLowerCase())), [uniList, searchB]);
+  const filteredC = useMemo(() => uniList.filter((u) => u.name.toLowerCase().includes(searchC.toLowerCase())), [uniList, searchC]);
 
   const objA = useMemo(() => data.find((u) => u.name === uniA) || data[0], [data, uniA]);
   const objB = useMemo(() => data.find((u) => u.name === uniB) || data[1], [data, uniB]);
   const objC = useMemo(() => data.find((u) => u.name === uniC) || data[2], [data, uniC]);
 
-  // Dumbbell Chart Scatter Data Structure
-  const dumbbellData = useMemo(() => {
+  // Dumbbell Chart Row Calculation
+  const dumbbellRows = useMemo(() => {
     if (!objA || !objB || !objC) return [];
 
-    return INDICATORS.map((ind, idx) => ({
-      yIndex: idx,
-      indicator: ind.label,
-      scoreA: Number((objA[ind.key as keyof University] as number || 0).toFixed(1)),
-      scoreB: Number((objB[ind.key as keyof University] as number || 0).toFixed(1)),
-      scoreC: Number((objC[ind.key as keyof University] as number || 0).toFixed(1)),
-    }));
+    return INDICATORS.map((ind) => {
+      const valA = Number(((objA[ind.key as keyof University] as number) || 0).toFixed(1));
+      const valB = Number(((objB[ind.key as keyof University] as number) || 0).toFixed(1));
+      const valC = Number(((objC[ind.key as keyof University] as number) || 0).toFixed(1));
+
+      const minVal = Math.min(valA, valB, valC);
+      const maxVal = Math.max(valA, valB, valC);
+
+      return {
+        label: ind.label,
+        valA,
+        valB,
+        valC,
+        minVal,
+        maxVal,
+      };
+    });
   }, [objA, objB, objC]);
 
   return (
     <div className="space-y-6">
-      {/* Selector Banner */}
+      {/* Search & Selector Banner */}
       <div className="glass-card p-6 rounded-2xl space-y-4">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-gray-200 dark:border-gray-800">
           <div className="flex items-center space-x-3">
@@ -87,53 +96,86 @@ export default function UniversityThreeWayCompare({ data }: UniversityThreeWayCo
                 3-University Head-to-Head Comparison & Dumbbell Chart
               </h3>
               <p className="text-xs text-sub">
-                Select 3 universities to compare score breakdowns across all 9 QS dimensions.
+                Type institution names to search, filter, and compare across all 9 QS dimensions.
               </p>
             </div>
           </div>
 
-          {/* Selectors */}
+          {/* Searchable Selectors */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-            <div>
-              <label className="block text-[10px] font-bold text-indigo-600 dark:text-indigo-400 mb-1">
-                University A (Indigo)
+            {/* Uni A */}
+            <div className="space-y-1">
+              <label className="block text-[10px] font-bold text-indigo-600 dark:text-indigo-400">
+                Uni A (Indigo): <span className="font-extrabold truncate">{objA?.name}</span>
               </label>
+              <div className="relative">
+                <Search className="w-3 h-3 text-sub absolute left-2.5 top-2.5" />
+                <input
+                  type="text"
+                  placeholder="Search Uni A..."
+                  value={searchA}
+                  onChange={(e) => setSearchA(e.target.value)}
+                  className="w-full custom-input rounded-xl pl-8 pr-2 py-1.5 text-xs font-semibold focus:outline-none"
+                />
+              </div>
               <select
                 value={uniA}
-                onChange={(e) => setUniA(e.target.value)}
-                className="w-full custom-input rounded-xl px-2.5 py-1.5 font-bold focus:outline-none"
+                onChange={(e) => { setUniA(e.target.value); setSearchA(""); }}
+                className="w-full custom-input rounded-xl px-2 py-1 font-bold text-xs focus:outline-none"
               >
-                {uniList.map((u) => (
+                {filteredA.map((u) => (
                   <option key={u.name} value={u.name}>{u.name}</option>
                 ))}
               </select>
             </div>
 
-            <div>
-              <label className="block text-[10px] font-bold text-emerald-600 dark:text-emerald-400 mb-1">
-                University B (Emerald)
+            {/* Uni B */}
+            <div className="space-y-1">
+              <label className="block text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+                Uni B (Emerald): <span className="font-extrabold truncate">{objB?.name}</span>
               </label>
+              <div className="relative">
+                <Search className="w-3 h-3 text-sub absolute left-2.5 top-2.5" />
+                <input
+                  type="text"
+                  placeholder="Search Uni B..."
+                  value={searchB}
+                  onChange={(e) => setSearchB(e.target.value)}
+                  className="w-full custom-input rounded-xl pl-8 pr-2 py-1.5 text-xs font-semibold focus:outline-none"
+                />
+              </div>
               <select
                 value={uniB}
-                onChange={(e) => setUniB(e.target.value)}
-                className="w-full custom-input rounded-xl px-2.5 py-1.5 font-bold focus:outline-none"
+                onChange={(e) => { setUniB(e.target.value); setSearchB(""); }}
+                className="w-full custom-input rounded-xl px-2 py-1 font-bold text-xs focus:outline-none"
               >
-                {uniList.map((u) => (
+                {filteredB.map((u) => (
                   <option key={u.name} value={u.name}>{u.name}</option>
                 ))}
               </select>
             </div>
 
-            <div>
-              <label className="block text-[10px] font-bold text-amber-600 dark:text-amber-400 mb-1">
-                University C (Amber)
+            {/* Uni C */}
+            <div className="space-y-1">
+              <label className="block text-[10px] font-bold text-amber-600 dark:text-amber-400">
+                Uni C (Amber): <span className="font-extrabold truncate">{objC?.name}</span>
               </label>
+              <div className="relative">
+                <Search className="w-3 h-3 text-sub absolute left-2.5 top-2.5" />
+                <input
+                  type="text"
+                  placeholder="Search Uni C..."
+                  value={searchC}
+                  onChange={(e) => setSearchC(e.target.value)}
+                  className="w-full custom-input rounded-xl pl-8 pr-2 py-1.5 text-xs font-semibold focus:outline-none"
+                />
+              </div>
               <select
                 value={uniC}
-                onChange={(e) => setUniC(e.target.value)}
-                className="w-full custom-input rounded-xl px-2.5 py-1.5 font-bold focus:outline-none"
+                onChange={(e) => { setUniC(e.target.value); setSearchC(""); }}
+                className="w-full custom-input rounded-xl px-2 py-1 font-bold text-xs focus:outline-none"
               >
-                {uniList.map((u) => (
+                {filteredC.map((u) => (
                   <option key={u.name} value={u.name}>{u.name}</option>
                 ))}
               </select>
@@ -141,7 +183,7 @@ export default function UniversityThreeWayCompare({ data }: UniversityThreeWayCo
           </div>
         </div>
 
-        {/* 1. Comparison Table */}
+        {/* Comparison Table */}
         <div className="overflow-x-auto pt-2">
           <table className="w-full text-left text-xs">
             <thead className="custom-table-header uppercase tracking-wider font-extrabold">
@@ -207,52 +249,81 @@ export default function UniversityThreeWayCompare({ data }: UniversityThreeWayCo
         </div>
       </div>
 
-      {/* 2. Dumbbell Chart Component */}
+      {/* 2. Custom SVG Dumbbell Chart Component */}
       <div className="glass-card p-6 rounded-2xl space-y-4">
-        <div className="pb-3 border-b border-gray-200 dark:border-gray-800">
-          <h3 className="font-extrabold text-main text-base">
-            University A vs B vs C — Dumbbell Chart
-          </h3>
-          <p className="text-xs text-sub">
-            Indicator alignment plot showing score gap dispersion across all 9 QS dimensions.
-          </p>
+        <div className="flex items-center justify-between pb-3 border-b border-gray-200 dark:border-gray-800">
+          <div>
+            <h3 className="font-extrabold text-main text-base">
+              University A vs B vs C — Dumbbell Chart
+            </h3>
+            <p className="text-xs text-sub">
+              Score alignment dumbbell plot displaying exact indicator gaps between selected institutions.
+            </p>
+          </div>
+          
+          <div className="flex items-center space-x-3 text-xs font-bold">
+            <span className="flex items-center space-x-1 text-indigo-600 dark:text-indigo-400">
+              <span className="w-3 h-3 rounded-full bg-indigo-600 inline-block" />
+              <span>{objA?.name}</span>
+            </span>
+            <span className="flex items-center space-x-1 text-emerald-600 dark:text-emerald-400">
+              <span className="w-3 h-3 rounded-full bg-emerald-500 inline-block" />
+              <span>{objB?.name}</span>
+            </span>
+            <span className="flex items-center space-x-1 text-amber-600 dark:text-amber-400">
+              <span className="w-3 h-3 rounded-full bg-amber-500 inline-block" />
+              <span>{objC?.name}</span>
+            </span>
+          </div>
         </div>
 
-        <div className="h-80 w-full pt-2">
-          <ResponsiveContainer width="100%" height="100%">
-            <ScatterChart margin={{ top: 10, right: 30, left: 100, bottom: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#475569" opacity={0.3} />
-              <XAxis type="number" domain={[0, 100]} stroke="#94a3b8" fontSize={11} />
-              <YAxis
-                type="category"
-                dataKey="indicator"
-                stroke="#94a3b8"
-                fontSize={11}
-                tickLine={false}
-                width={140}
-              />
-              <Tooltip
-                content={({ active, payload }) => {
-                  if (active && payload && payload.length) {
-                    const d = payload[0].payload;
-                    return (
-                      <div className="p-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs shadow-xl space-y-1">
-                        <div className="font-bold text-gray-200">{d.indicator}</div>
-                        <div className="text-indigo-400">{objA?.name}: {d.scoreA}</div>
-                        <div className="text-emerald-400">{objB?.name}: {d.scoreB}</div>
-                        <div className="text-amber-400">{objC?.name}: {d.scoreC}</div>
-                      </div>
-                    );
-                  }
-                  return null;
-                }}
-              />
-              <Scatter name={objA?.name} data={dumbbellData.map((d) => ({ ...d, xScore: d.scoreA }))} fill="#6366F1" />
-              <Scatter name={objB?.name} data={dumbbellData.map((d) => ({ ...d, xScore: d.scoreB }))} fill="#10B981" />
-              <Scatter name={objC?.name} data={dumbbellData.map((d) => ({ ...d, xScore: d.scoreC }))} fill="#F59E0B" />
-              <Legend wrapperStyle={{ paddingTop: "10px", fontSize: "11px", fontWeight: 700 }} />
-            </ScatterChart>
-          </ResponsiveContainer>
+        {/* Interactive Horizontal Dumbbell Rows */}
+        <div className="space-y-4 pt-2">
+          {dumbbellRows.map((row) => (
+            <div key={row.label} className="space-y-1">
+              <div className="flex items-center justify-between text-xs font-bold text-main">
+                <span>{row.label}</span>
+                <div className="flex items-center space-x-3 font-mono text-[11px]">
+                  <span className="text-indigo-600 dark:text-indigo-400">A: {row.valA}</span>
+                  <span className="text-emerald-600 dark:text-emerald-400">B: {row.valB}</span>
+                  <span className="text-amber-600 dark:text-amber-400">C: {row.valC}</span>
+                </div>
+              </div>
+
+              {/* Bar track & Dumbbell Dots */}
+              <div className="relative h-6 bg-slate-200 dark:bg-slate-800 rounded-lg flex items-center px-2">
+                {/* Connecting Line between Min and Max */}
+                <div
+                  className="absolute h-1.5 bg-indigo-500/50 rounded-full"
+                  style={{
+                    left: `${row.minVal}%`,
+                    width: `${Math.max(row.maxVal - row.minVal, 1)}%`,
+                  }}
+                />
+
+                {/* Dot A (Indigo) */}
+                <div
+                  className="absolute w-4 h-4 rounded-full bg-indigo-600 border-2 border-white shadow-md transition-all z-10"
+                  style={{ left: `calc(${row.valA}% - 8px)` }}
+                  title={`${objA?.name}: ${row.valA}`}
+                />
+
+                {/* Dot B (Emerald) */}
+                <div
+                  className="absolute w-4 h-4 rounded-full bg-emerald-500 border-2 border-white shadow-md transition-all z-10"
+                  style={{ left: `calc(${row.valB}% - 8px)` }}
+                  title={`${objB?.name}: ${row.valB}`}
+                />
+
+                {/* Dot C (Amber) */}
+                <div
+                  className="absolute w-4 h-4 rounded-full bg-amber-500 border-2 border-white shadow-md transition-all z-10"
+                  style={{ left: `calc(${row.valC}% - 8px)` }}
+                  title={`${objC?.name}: ${row.valC}`}
+                />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

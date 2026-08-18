@@ -11,6 +11,7 @@ import {
   Tooltip, 
   ResponsiveContainer 
 } from "recharts";
+import { Search } from "lucide-react";
 
 interface University {
   country: string;
@@ -43,17 +44,27 @@ const INDICATOR_KEYS = [
 ];
 
 export default function RadarComparison({ data }: RadarComparisonProps) {
-  // Available Countries
+  // Unique list of countries
   const countries = useMemo(() => {
     const set = new Set(data.map((d) => d.country).filter(Boolean));
     return Array.from(set).sort();
   }, [data]);
 
+  // Selected Country States
   const [countryA, setCountryA] = useState("United States of America");
   const [countryB, setCountryB] = useState("United Kingdom");
   const [countryC, setCountryC] = useState("Germany");
 
-  // Compute Averages for Country A, Country B, and Country C
+  // Search Input States
+  const [searchA, setSearchA] = useState("");
+  const [searchB, setSearchB] = useState("");
+  const [searchC, setSearchC] = useState("");
+
+  const filteredA = useMemo(() => countries.filter((c) => c.toLowerCase().includes(searchA.toLowerCase())), [countries, searchA]);
+  const filteredB = useMemo(() => countries.filter((c) => c.toLowerCase().includes(searchB.toLowerCase())), [countries, searchB]);
+  const filteredC = useMemo(() => countries.filter((c) => c.toLowerCase().includes(searchC.toLowerCase())), [countries, searchC]);
+
+  // Radar Data calculation
   const radarData = useMemo(() => {
     const listA = data.filter((d) => d.country === countryA);
     const listB = data.filter((d) => d.country === countryB);
@@ -81,50 +92,85 @@ export default function RadarComparison({ data }: RadarComparisonProps) {
             Multi-Indicator 3-Country Radar Comparison
           </h3>
           <p className="text-xs text-sub mt-0.5">
-            Side-by-side performance profiling across all 9 QS dimensions for 3 selected nations.
+            Search or select 3 countries to analyze side-by-side performance across all 9 QS dimensions.
           </p>
         </div>
 
-        {/* 3 Country Selectors */}
-        <div className="flex flex-wrap items-center gap-3 text-xs">
-          <div>
-            <label className="block text-[10px] font-bold text-sub mb-1">Country A (Indigo)</label>
+        {/* Searchable Country Selectors */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          {/* Country A */}
+          <div className="space-y-1">
+            <label className="block text-[10px] font-bold text-indigo-600 dark:text-indigo-400">
+              Country A (Indigo): <span className="font-extrabold">{countryA}</span>
+            </label>
+            <div className="relative">
+              <Search className="w-3 h-3 text-sub absolute left-2.5 top-2.5" />
+              <input
+                type="text"
+                placeholder="Search country A..."
+                value={searchA}
+                onChange={(e) => setSearchA(e.target.value)}
+                className="w-full custom-input rounded-xl pl-8 pr-2 py-1.5 text-xs font-semibold focus:outline-none"
+              />
+            </div>
             <select
               value={countryA}
-              onChange={(e) => setCountryA(e.target.value)}
-              className="custom-input rounded-xl px-3 py-1.5 font-bold focus:outline-none"
+              onChange={(e) => { setCountryA(e.target.value); setSearchA(""); }}
+              className="w-full custom-input rounded-xl px-2 py-1 font-bold text-xs focus:outline-none"
             >
-              {countries.map((c) => (
+              {filteredA.map((c) => (
                 <option key={c} value={c}>{c}</option>
               ))}
             </select>
           </div>
 
-          <span className="font-extrabold text-sub pt-4">VS</span>
-
-          <div>
-            <label className="block text-[10px] font-bold text-sub mb-1">Country B (Emerald)</label>
+          {/* Country B */}
+          <div className="space-y-1">
+            <label className="block text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+              Country B (Emerald): <span className="font-extrabold">{countryB}</span>
+            </label>
+            <div className="relative">
+              <Search className="w-3 h-3 text-sub absolute left-2.5 top-2.5" />
+              <input
+                type="text"
+                placeholder="Search country B..."
+                value={searchB}
+                onChange={(e) => setSearchB(e.target.value)}
+                className="w-full custom-input rounded-xl pl-8 pr-2 py-1.5 text-xs font-semibold focus:outline-none"
+              />
+            </div>
             <select
               value={countryB}
-              onChange={(e) => setCountryB(e.target.value)}
-              className="custom-input rounded-xl px-3 py-1.5 font-bold focus:outline-none"
+              onChange={(e) => { setCountryB(e.target.value); setSearchB(""); }}
+              className="w-full custom-input rounded-xl px-2 py-1 font-bold text-xs focus:outline-none"
             >
-              {countries.map((c) => (
+              {filteredB.map((c) => (
                 <option key={c} value={c}>{c}</option>
               ))}
             </select>
           </div>
 
-          <span className="font-extrabold text-sub pt-4">VS</span>
-
-          <div>
-            <label className="block text-[10px] font-bold text-sub mb-1">Country C (Amber)</label>
+          {/* Country C */}
+          <div className="space-y-1">
+            <label className="block text-[10px] font-bold text-amber-600 dark:text-amber-400">
+              Country C (Amber): <span className="font-extrabold">{countryC}</span>
+            </label>
+            <div className="relative">
+              <Search className="w-3 h-3 text-sub absolute left-2.5 top-2.5" />
+              <input
+                type="text"
+                placeholder="Search country C..."
+                value={searchC}
+                onChange={(e) => setSearchC(e.target.value)}
+                className="w-full custom-input rounded-xl pl-8 pr-2 py-1.5 text-xs font-semibold focus:outline-none"
+              />
+            </div>
             <select
               value={countryC}
-              onChange={(e) => setCountryC(e.target.value)}
-              className="custom-input rounded-xl px-3 py-1.5 font-bold focus:outline-none"
+              onChange={(e) => { setCountryC(e.target.value); setSearchC(""); }}
+              className="w-full custom-input rounded-xl px-2 py-1 font-bold text-xs focus:outline-none"
             >
-              {countries.map((c) => (
+              {filteredC.map((c) => (
                 <option key={c} value={c}>{c}</option>
               ))}
             </select>
@@ -132,34 +178,16 @@ export default function RadarComparison({ data }: RadarComparisonProps) {
         </div>
       </div>
 
-      {/* Radar Chart Canvas */}
+      {/* Radar Canvas */}
       <div className="h-[380px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
             <PolarGrid stroke="#475569" strokeDasharray="3 3" opacity={0.4} />
             <PolarAngleAxis dataKey="indicator" stroke="#94A3B8" tick={{ fontSize: 11, fontWeight: 700 }} />
             <PolarRadiusAxis angle={30} domain={[0, 100]} stroke="#64748B" tick={{ fontSize: 10 }} />
-            <Radar
-              name={countryA}
-              dataKey={countryA}
-              stroke="#6366F1"
-              fill="#6366F1"
-              fillOpacity={0.3}
-            />
-            <Radar
-              name={countryB}
-              dataKey={countryB}
-              stroke="#10B981"
-              fill="#10B981"
-              fillOpacity={0.3}
-            />
-            <Radar
-              name={countryC}
-              dataKey={countryC}
-              stroke="#F59E0B"
-              fill="#F59E0B"
-              fillOpacity={0.3}
-            />
+            <Radar name={countryA} dataKey={countryA} stroke="#6366F1" fill="#6366F1" fillOpacity={0.3} />
+            <Radar name={countryB} dataKey={countryB} stroke="#10B981" fill="#10B981" fillOpacity={0.3} />
+            <Radar name={countryC} dataKey={countryC} stroke="#F59E0B" fill="#F59E0B" fillOpacity={0.3} />
             <Tooltip
               contentStyle={{
                 backgroundColor: "#0F172A",
