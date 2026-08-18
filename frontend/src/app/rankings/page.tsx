@@ -179,7 +179,7 @@ export default function RankingsPage() {
         <ScoreCard
           title="Total Universities"
           value={data.length.toLocaleString()}
-          subtitle="Zero rows deleted"
+          subtitle="Full Dataset Evaluated"
           badge={{ text: "100% Retained", type: "success" }}
           icon={Building2}
         />

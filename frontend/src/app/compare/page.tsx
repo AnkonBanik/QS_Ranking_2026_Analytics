@@ -77,22 +77,28 @@ export default function ComparePage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    Promise.all([
-      fetch("/data/countries.json").then((r) => r.json()),
-      fetch("/data/regions.json").then((r) => r.json()),
-      fetch("/data/rankings.json").then((r) => r.json()),
-      fetch("/data/original_vs_new.json").then((r) => r.json()),
-    ]).then(([cData, rData, rkData, ovnData]) => {
-      setCountries(cData.slice(0, 15));
-      setRegions(rData);
-      setRankings(rkData);
-      setOrigVsNew(ovnData);
-      setLoading(false);
-    }).catch(err => {
-      console.error("Error loading comparison data:", err);
-      setError("Failed to load comparative data contracts. Please run python -m pipeline.run_pipeline.");
-      setLoading(false);
-    });
+    const loadData = async () => {
+      try {
+        const [cRes, rRes, rkRes, ovnRes] = await Promise.allSettled([
+          fetch("/data/countries.json").then((r) => r.json()),
+          fetch("/data/regions.json").then((r) => r.json()),
+          fetch("/data/rankings.json").then((r) => r.json()),
+          fetch("/data/original_vs_new.json").then((r) => r.json()),
+        ]);
+
+        if (cRes.status === "fulfilled") setCountries(cRes.value.slice(0, 15));
+        if (rRes.status === "fulfilled") setRegions(rRes.value);
+        if (rkRes.status === "fulfilled") setRankings(rkRes.value);
+        if (ovnRes.status === "fulfilled") setOrigVsNew(ovnRes.value);
+
+        setLoading(false);
+      } catch (err) {
+        console.error("Error loading comparison data:", err);
+        setError("Failed to load comparative data contracts.");
+        setLoading(false);
+      }
+    };
+    loadData();
   }, []);
 
   if (loading) {

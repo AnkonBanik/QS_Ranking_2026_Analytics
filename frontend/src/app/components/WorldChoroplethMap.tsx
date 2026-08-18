@@ -37,6 +37,19 @@ export default function WorldChoroplethMap() {
     );
   }, [mapData, countrySearch]);
 
+  // Live Sync: Automatically update activeCountry to top search result when searching
+  useEffect(() => {
+    if (filteredMapData.length > 0) {
+      // Check if current active country is still in filtered results; if not, pick first match
+      const exists = filteredMapData.some((c) => c.country === activeCountry?.country);
+      if (!exists || countrySearch.trim().length > 0) {
+        setActiveCountry(filteredMapData[0]);
+      }
+    } else {
+      setActiveCountry(null);
+    }
+  }, [filteredMapData, countrySearch]);
+
   const maxCount = Math.max(...mapData.map((d) => d.count), 1);
   const maxScore = Math.max(...mapData.map((d) => d.avg_score), 1);
 
@@ -91,7 +104,7 @@ export default function WorldChoroplethMap() {
         </div>
       </div>
 
-      {/* Main Grid View with Search */}
+      {/* Main Grid View with Live Search */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         {/* Country Search & Grid (106 Countries) */}
         <div className="lg:col-span-2 space-y-3">
@@ -103,7 +116,7 @@ export default function WorldChoroplethMap() {
               <Search className="w-3.5 h-3.5 text-sub absolute left-3 top-2.5" />
               <input
                 type="text"
-                placeholder="Search map country..."
+                placeholder="Type country (e.g. Thailand, Germany)..."
                 value={countrySearch}
                 onChange={(e) => setCountrySearch(e.target.value)}
                 className="w-full custom-input rounded-xl pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:border-indigo-500"
@@ -138,7 +151,7 @@ export default function WorldChoroplethMap() {
         </div>
 
         {/* Selected Country Inspector Card */}
-        {activeCountry && (
+        {activeCountry ? (
           <div className="glass-card p-5 rounded-xl border border-indigo-500/30 space-y-4 bg-indigo-500/5">
             <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
               <div>
@@ -177,6 +190,10 @@ export default function WorldChoroplethMap() {
                 {activeCountry.top_university}
               </div>
             </div>
+          </div>
+        ) : (
+          <div className="glass-card p-8 rounded-xl border border-gray-200 dark:border-gray-800 text-center text-xs text-sub">
+            Search or click a country to view details
           </div>
         )}
       </div>
