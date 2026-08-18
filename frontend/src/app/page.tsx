@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import RankingsPage from "./rankings/page";
 
 export default function Home() {
-  redirect("/rankings");
+  return <RankingsPage />;
 }
