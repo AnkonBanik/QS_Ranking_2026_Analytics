@@ -15,6 +15,8 @@ import {
 import ScoreCard from "../components/ScoreCard";
 import WorldChoroplethMap from "../components/WorldChoroplethMap";
 import TopUniversitiesBarChart from "../components/TopUniversitiesBarChart";
+import ScoreRankHistograms from "../components/ScoreRankHistograms";
+import UniversityHeatmap from "../components/UniversityHeatmap";
 
 interface University {
   sl: number;
@@ -175,7 +177,7 @@ export default function RankingsPage() {
         </button>
       </div>
 
-      {/* Overview Score-Cards (Total Unis, Total Countries, Public, Private) */}
+      {/* 1. Overview Score-Cards (Total Unis, Total Countries, Public, Private) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <ScoreCard
           title="Total Universities"
@@ -207,13 +209,19 @@ export default function RankingsPage() {
         />
       </div>
 
-      {/* Interactive World Map (Positioned below KPI score cards) */}
-      <WorldChoroplethMap />
-
-      {/* Top Institutions Combination Bar Chart (Top 5, 10, 15, 20) */}
+      {/* 2. Top Institutions Performance Bar Chart */}
       <TopUniversitiesBarChart data={data} />
 
-      {/* Control Bar: Search & Filters */}
+      {/* 3. Overall Score & Rank Distribution Histograms */}
+      <ScoreRankHistograms data={data} />
+
+      {/* 4. University Performance Heatmap (Top 20 x 9 Indicators) */}
+      <UniversityHeatmap data={data} />
+
+      {/* 5. Global University Distribution - World Map */}
+      <WorldChoroplethMap />
+
+      {/* 6. Control Bar: Search & Filters */}
       <div className="glass-card p-5 rounded-2xl space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
           {/* Search Box */}
