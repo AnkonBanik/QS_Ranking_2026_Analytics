@@ -209,14 +209,14 @@ export default function RankingsPage() {
         />
       </div>
 
-      {/* 2. Top Institutions Performance Bar Chart */}
+      {/* 2. Global University Distribution - World Map (Positioned right below KPI cards) */}
+      <WorldChoroplethMap />
+
+      {/* 3. Top Institutions Performance Bar Chart */}
       <TopUniversitiesBarChart data={data} />
 
-      {/* 3. Overall Score & Rank Distribution Histograms */}
+      {/* 4. Overall Score & Rank Distribution Histograms */}
       <ScoreRankHistograms data={data} />
-
-      {/* 4. Global University Distribution - World Map */}
-      <WorldChoroplethMap />
 
       {/* 6. Control Bar: Search & Filters */}
       <div className="glass-card p-5 rounded-2xl space-y-4">
